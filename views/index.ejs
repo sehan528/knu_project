@@ -50,25 +50,65 @@
 
     <%- include('nav.html') %>
 
-    <div class="b1">
-        <h1 class="display-2">Major Book</h1>
-        <h1 class="display-2">DANAWA!</h1>
-    </div>
-
-    <div class="main">
-        <div class="form-group has-search">
-            <span class="fa fa-search form-control-feedback"></span>
-
-            <form method="get" action="/book_search">
-                <input type="text" class="form-control bg-dark" name="value" placeholder="Search">
-            </form>
+        <div class="b1">
+            <h1 class="display-2">Major Book</h1>
+            <h1 class="display-2">DANAWA!</h1>
         </div>
-        <p class="mt-4 text-center"><a href="https://www.google.co.kr/">I'll google</a></p>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-        crossorigin="anonymous"></script>
+        <div class="main">
+            <div class="form-group has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+
+                <div id="recent-searches">
+                    <form method="get" action="/book_search">
+                        <input type="text" class="form-control bg-dark" name="value" placeholder="Search">
+                    </form>
+                </div>
+
+            </div>
+            <p class="mt-4 text-center"><a href="https://www.google.co.kr/">I'll google</a></p>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
 </body>
 
+<script>
+    // 최근 검색어 목록을 저장할 배열
+    var recentSearches = [];
+
+    // 검색어를 저장하는 함수
+    function saveRecentSearch(searchTerm) {
+        // 검색어가 이미 배열에 존재하는지 확인
+        if (recentSearches.includes(searchTerm)) {
+            // 이미 존재하면 해당 검색어를 배열에서 제거하고 가장 앞에 다시 추가
+            recentSearches.splice(recentSearches.indexOf(searchTerm), 1);
+        }
+        // 배열 맨 앞에 검색어 추가
+        recentSearches.unshift(searchTerm);
+
+        // 최근 검색어 목록을 저장하는 div 요소 가져오기
+        var recentSearchesDiv = document.getElementById("recent-searches");
+        // 이전에 표시된 검색어 목록 삭제
+        recentSearchesDiv.innerHTML = "";
+        // 최근 검색어 목록을 표시하는 요소 생성
+        var ul = document.createElement("ul");
+        ul.style.listStyleType = "none";
+        ul.style.padding = "0";
+        ul.style.margin = "0";
+        // 최근 검색어를 리스트 아이템으로 추가
+        for (var i = 0; i < Math.min(recentSearches.length, 3); i++) {
+            var li = document.createElement("li");
+            li.style.display = "inline-block";
+            li.style.marginRight = "10px";
+            li.innerHTML = recentSearches[i];
+            ul.appendChild(li);
+        }
+        // 최근 검색어 목록을 div 요소에 추가
+        recentSearchesDiv.appendChild(ul);
+    }
+</script>
+
 </html>
+

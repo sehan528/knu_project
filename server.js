@@ -22,8 +22,8 @@ MongoClient.connect("mongodb+srv://admin:1q2w3e4r@cluster0.dh8gyjd.mongodb.net/t
     if(에러) {return console.log(에러)};
     db = client.db('KNUDB');
 
-    app.listen(7000, function() {
-        console.log('listening on 7000');
+    app.listen(3000, function() {
+        console.log('listening on 3000');
     });
     
 })
