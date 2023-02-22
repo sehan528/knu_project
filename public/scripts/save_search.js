@@ -1,96 +1,88 @@
-const toDoForm = document.querySelector('#todo-form');
-const toDoInput = toDoForm.querySelector('input');
-const toDoList = document.querySelector('#todo-list');
-const allDelete = document.querySelector('.allDelete');
-const txt = document.querySelector('.txt');
-const TODOS_KEY = "todos";
+$(document).ready(function () {
 
-let toDos = [];
+    // 최근 검색어 목록 가져오기
+    var recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
 
-function saveToDos() {
-    typeof Storage !== "undefined" &&
-    localStorage.setItem(TODOS_KEY, JSON.stringify(toDos.slice(-3))); // 최근 3개의 항목만 저장
-    console.log(toDos);
-};
+    // 최근 검색어 목록 표시
+    var todoList = $("#todo-list");
 
-function allDeleteToDo() { //전체 item을 삭제
-    // localStorage.clear(toDos);
-    // console.log(toDos);
-    // toDoList.innerText = '최근검색어 내역이 없습니다.';
 
-    localStorage.removeItem(TODOS_KEY);
-    toDos = []; // toDos 배열도 초기화
-    toDoList.innerText = '최근검색어 내역이 없습니다.';
-    txt.innerText = ''; // '최근검색어 내역이 없습니다.' 문구도 초기화
-    allDelete.classList.add('off'); // '모두 지우기' 버튼을 다시 숨깁니다.
-};
 
-function deleteToDo(e) {
-    const li = e.target.parentElement;
-    li.remove();
-    toDos = toDos.filter((toDo) => toDo.id !== parseInt(li.id));
-    toDos.length === 0 && (txt.innerText = "최근검색어 내역이 없습니다.");
-    saveToDos();
-    if (toDos.length < 3) { // 항목이 3개보다 적을 경우 빈 문자열을 채워줌
+
+    for (var i = 0; i < recentSearches.length; i++) {
+        var listItem = $("<p></p>");
+        var itemText = $("<span></span>").addClass("btn item-text").text(recentSearches[i]);
         
-        for (let i = toDos.length; i < 3; i++) {
-            toDos.push({ id: Date.now(), text: "" });
+        var itemText = $("<span></span>")
+                .addClass("btn item-text")
+                .css("color", "#BDBDBD")
+                .text(recentSearches[i])
+                .attr("onclick", "searchWithKeyword('" + recentSearches[i] + "')")
+                .click(function() {
+                    var keyword = $(this).text();
+                    var url = "/book_search?value=" + encodeURIComponent(keyword);
+                    window.location.href = url;
+                })
+                
+        var deleteButton = $("<span></span>").addClass("btn btn-sm delete").text("❌");
+        listItem.append(itemText);
+        listItem.append(deleteButton);
+        todoList.append(listItem);
+
+        function searchWithKeyword(keyword) {
+            var url = "/book_search?value=" + encodeURIComponent(keyword);
+            window.location.href = url;
         }
     }
-};
 
-function paintToDo (newTodo) { //화면에 뿌림
-    if (!newTodo) {
-        return;
-    }
 
-    const {id, text} = newTodo;
-    const item = document.createElement("li");
-    const span = document.createElement("span");
-    const button = document.createElement("button");
 
-    item.id = id;
-    span.innerText = text;
-    button.innerText = '❌';
-    button.addEventListener("click", deleteToDo);
-    allDelete.addEventListener("click", allDeleteToDo);
-    item.appendChild(span);
-    item.appendChild(button);
-    toDoList.appendChild(item);
 
-    const toDoItems = document.querySelectorAll('#todo-list li'); // 현재 리스트 항목 개수 가져오기
-    if (toDoItems.length > 3) { // 리스트 항목이 3개 이상인 경우
-        // toDoList.removeChild(toDoItems[toDoItems.length - 1]); // 리스트의 마지막 항목 삭제
-        toDoList.removeChild(toDoItems[0]);
-    }
+    // 검색어 입력폼 제출 시 실행
+    $("form").submit(function (event) {
+        event.preventDefault();
 
-    if (toDos.length > 0) {
-        allDelete.classList.remove('off');
-    } else {
-        txt.innerText = '최근검색어 내역이 없습니다.';
-    }
-    saveToDos();
-};
+        // 검색어 입력
+        var newKeyword = $("input[name=value]").val();
 
-function handleToDoSubmit(event) {
-    event.preventDefault();
-    const newTodoItem = toDoInput.value;
-    toDoInput.value = '';
-    if (newTodoItem !== '') { // 입력값이 비어있지 않은 경우에만 실행
-        const newTodoObj = {
-            id: Date.now(),
-            text: newTodoItem
-        };
-        toDos.push(newTodoObj);
-        paintToDo(newTodoObj);
-        saveToDos();
-    }
-};
+        // 검색어가 최근 검색어 목록에 있는지 확인하고 삭제
+        var index = recentSearches.indexOf(newKeyword);
+        if (index !== -1) {
+            recentSearches.splice(index, 1);
+        }
 
-toDoForm.addEventListener('submit', handleToDoSubmit);
+        // 검색어가 최대 4개까지만 저장되도록 함
+        if (recentSearches.length >= 4) {
+            recentSearches.shift(); // 가장 오래된 검색어 삭제
+        }
 
-const savedToDos = JSON.parse(localStorage.getItem(TODOS_KEY));
-if(savedToDos !== null) {
-    toDos = savedToDos //전에 있던 items들을 계속 가지도 있다록 합니다. 
-    savedToDos.forEach(paintToDo);
-}
+        // 최근 검색어 목록에 검색어 추가
+        recentSearches.push(newKeyword);
+
+        // 최근 검색어 목록을 로컬 스토리지에 저장
+        localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+
+        // 검색어로 재검색
+        var url = "/book_search?value=" + encodeURIComponent(newKeyword);
+        window.location.href = url;
+    });
+
+    // 최근 검색어 목록에서 검색어 삭제
+    $(document).on("click", ".delete", function () {
+        var itemText = $(this).prev().text();
+        var index = recentSearches.indexOf(itemText);
+        if (index !== -1) {
+            recentSearches.splice(index, 1);
+            $(this).parent().remove();
+            localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+        }
+    });
+
+    // 최근 검색어 목록 전체 삭제
+    $(".allDelete").click(function () {
+        recentSearches = [];
+        todoList.empty();
+        localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+    });
+
+});
