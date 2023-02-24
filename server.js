@@ -52,13 +52,15 @@ app.get('/used_book', (req,res) => {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+// 라우팅
+
 app.use('/book_search', require('./routes/server_book_search.js'));
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-
+// 세션 토큰 로그인 방법
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -109,7 +111,11 @@ app.get('/user_messenger' , logincheck, function(req, res) {
     }); // 모든 데이터 탐색.
 })
 
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+// 미들웨어 
 function logincheck (req, res, next) {
     if(req.user) {
         // console.log(요청.user);
@@ -162,6 +168,12 @@ passport.deserializeUser(function(get_id, done){
     })
 });
 
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+
 // DB Tag <- HTML Value
 app.post('/register', function(req, res) {
 
@@ -180,6 +192,7 @@ app.get('/used_write', logincheck, (req,res) => {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+//  multer (이미지 편집 및 등록을 위한 미들웨어)
 
 let multer = require('multer');
 var path = require('path');
@@ -196,7 +209,6 @@ var storage = multer.diskStorage({
     }
 });
 
-
 // var upload = multer({storage : storage});
 var upload = multer({
     storage: storage,
@@ -212,10 +224,17 @@ var upload = multer({
     }
 });
 
+
+// dummy
 // app.get('/used_write', function(요청,응답) {
 //     응답.render('used_book.ejs')
 // });
 
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+/** 새 글 작성  */
 app.post('/used_write', upload.single('img'), function(req,res) {
     
     db.collection('DB_postCount').findOne({name : 'DB_PSCNT'}, function(err,res1) {
@@ -246,6 +265,7 @@ app.post('/used_write', upload.single('img'), function(req,res) {
     res.redirect('/used_book')
 });
 
+/** 게시물 상세보기  */
 app.get('/used_view/:Viewid', (req,res) => {
     db.collection('DB_bookUpload').findOne({db_upload_post : parseInt(req.params.Viewid)}, function(err, result) {
         // console.log(result);
@@ -253,32 +273,88 @@ app.get('/used_view/:Viewid', (req,res) => {
     })
 });
 
+// ------------------------------------------------------------------------------------------------------------------
 
+/** 정보 수정을 위한 데이터  DB -> 클라  */
 app.get('/edit/:Viewid',function(req, res) {
     db.collection('DB_bookUpload').findOne({db_upload_post : parseInt(req.params.Viewid)}, function(err, result) {
-        console.log(result);
+        // console.log(result);
         res.render('edit.ejs', {getData : result});
     })
 });
 
-
+/** 정보 수정 클라 -> DB  */
 app.put('/edit' , upload.single('img'), function(req, res) {
-    console.log(req);
+    var number =  req.body.post_number;
+
+    // console.log(req.file.filename); // 클라이언트에서 전송한 데이터
+    // console.log(req.body.img_holder);
+
+
     var post = {
+        db_upload_post : req.body.post_number,
         db_upload_Name : req.body.book_name, 
         db_upload_Author : req.body.book_author, 
         db_upload_Price : req.body.book_price, 
+        
         db_upload_isCutoff : req.body.isCutoff,
         db_upload_isDiscolor : req.body.isDiscolor,
         db_upload_isDoodle : req.body.isDoodle,
         db_upload_isBookbinding : req.body.isBookbinding,
-        // db_upload_img : req.file.filename,
+        db_upload_img : req.body.img_holder,      // 우선 히든을 받아온다.
+
         db_upload_Comment : req.body.comment
     }
 
-    db.collection('DB_bookUpload').updateOne( {db_upload_post: parseInt(req.params.Viewid)}, {$set: post}, 
-    function(){
-        console.log(post);
+    if (post.db_upload_isCutoff === undefined) {
+        post.db_upload_isCutoff = null;
+    }
+    
+    if (post.db_upload_isDiscolor === undefined) {
+        post.db_upload_isDiscolor = null;
+    }
+    
+    if (post.db_upload_isDoodle === undefined) {
+        post.db_upload_isDoodle = null;
+    }
+    
+    if (post.db_upload_isBookbinding === undefined) {
+        post.db_upload_isBookbinding = null;
+    }
+
+    if (req.file?.filename) {
+        if (post.db_upload_img !== req.file.filename) {
+            post.db_upload_img = req.file.filename;
+        }
+        else {
+            console.log("skip");
+        }
+    }
+
+
+    console.log(post);
+    // console.log(post.db_upload_Name);
+    // console.log(db_post_number); // 이게 문제
+    // console.log((number));
+
+
+    // DB 전송
+    db.collection('DB_bookUpload').updateOne( {db_upload_post: parseInt(number)}, 
+    {$set: {
+        db_upload_Name: post.db_upload_Name,
+        db_upload_Author: post.db_upload_Author,
+        db_upload_Price: post.db_upload_Price,
+        db_upload_isCutoff: post.db_upload_isCutoff,
+        db_upload_isDiscolor: post.db_upload_isDiscolor,
+        db_upload_isDoodle: post.db_upload_isDoodle,
+        db_upload_isBookbinding: post.db_upload_isBookbinding,
+        db_upload_img: post.db_upload_img,
+        db_upload_Comment: post.db_upload_Comment
+    }}, 
+    function(err,result){
+        
+        if(err) return console.log(err);
+
         console.log('수정완료');
         res.redirect('/user_page');
         
@@ -286,6 +362,21 @@ app.put('/edit' , upload.single('img'), function(req, res) {
     
 });
 
+app.delete('/delete', function(req, res) {
+    req.body._id = parseInt(req.body._id);
+    var postId = {db_upload_post : req.body._id};
+    console.log(postId);
+
+    db.collection('DB_bookUpload').deleteOne(postId, function(err, result) {
+        if (err) throw err;
+        console.log('삭제 완료');
+        res.status(200).send({message : '삭제에 성공 했습니다.'});
+        
+        db.collection('DB_postCount').updateOne({name : 'DB_PSCNT'}, {$inc : {totalPost : -1}}, function(err, res) {
+            if(err) return console.log(err);
+        });
+    });
+});
 
 
 

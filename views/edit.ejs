@@ -20,6 +20,10 @@
             padding-left: 10px;
             color: aliceblue;
         }
+
+        /* input[type=file] {
+            display: none;
+        } */
     </style>
 
 </head>
@@ -28,63 +32,74 @@
 
     <!-- <%- include('nav2.html') %> -->
 
-        <form class="row g-3 text-white main" action="/edit?_method=PUT" method="POST" enctype="multipart/form-data">
+    <form class="row g-3 text-white main" action="/edit?_method=PUT" method="POST" enctype="multipart/form-data">
+
+        <input type="hidden" value="<%= getData.db_upload_post %>" name="post_number"></input>
+
+        <div class="col-md-6">
+            <label for="book-name" class="form-label">책 제목</label>
+            <input value="<%= getData.db_upload_Name %>" type="text" class="form-control" id="book-name"
+                name="book_name">
+        </div>
+
+        <div class="col-md-6">
+            <label for="book-author" class="form-label">저자</label>
+            <input value="<%= getData.db_upload_Author %>" type="text" class="form-control" id="book-author"
+                name="book_author">
+        </div>
+
+        <div class="col-12">
+            <label for="price" class="form-label">희망 가격</label>
+            <input value="<%= getData.db_upload_Price %>" type="text" class="form-control" id="price" name="book_price">
+        </div>
+
+        <div class="row mb-3">
 
             <div class="col-md-6">
-                <label for="book-name" class="form-label">책 제목</label>
-                <input value="<%= getData.db_upload_Name %>" type="text" class="form-control" id="book-name" name="book_name">
+                <input value="<%= getData.db_upload_isCutoff %>" class="form-check-input" type="checkbox"
+                    id="gridCheck0" name="isCutoff">
+                <label class="form-check-label" for="gridCheck0">찢어짐</label>
             </div>
 
             <div class="col-md-6">
-                <label for="book-author" class="form-label">저자</label>
-                <input value="<%= getData.db_upload_Author %>" type="text" class="form-control" id="book-author" name="book_author">
+                <input class="form-check-input" type="checkbox" id="gridCheck1" name="isDiscolor">
+                <label class="form-check-label" for="gridCheck1">변색</label>
             </div>
 
-            <div class="col-12">
-                <label for="price" class="form-label">희망 가격</label>
-                <input value="<%= getData.db_upload_Price %>" type="text" class="form-control" id="price" name="book_price">
+            <div class="col-md-6">
+                <input class="form-check-input" type="checkbox" id="gridCheck2" name="isDoodle">
+                <label class="form-check-label" for="gridCheck2">낙서</label>
             </div>
 
-            <div class="row mb-3">
-
-                <div class="col-md-6">
-                    <input value="<%= getData.db_upload_isCutoff %>" class="form-check-input" type="checkbox" id="gridCheck0" name="isCutoff">
-                    <label class="form-check-label" for="gridCheck0">찢어짐</label>
-                </div>
-
-                <div class="col-md-6">
-                    <input class="form-check-input" type="checkbox" id="gridCheck1" name="isDiscolor">
-                    <label class="form-check-label" for="gridCheck1">변색</label>
-                </div>
-
-                <div class="col-md-6">
-                    <input class="form-check-input" type="checkbox" id="gridCheck2" name="isDoodle">
-                    <label class="form-check-label" for="gridCheck2">낙서</label>
-                </div>
-
-                <div class="col-md-6">
-                    <input class="form-check-input" type="checkbox" id="gridCheck3" name="isBookbinding">
-                    <label class="form-check-label" for="gridCheck3">제본</label>
-                </div>
-
+            <div class="col-md-6">
+                <input class="form-check-input" type="checkbox" id="gridCheck3" name="isBookbinding">
+                <label class="form-check-label" for="gridCheck3">제본</label>
             </div>
 
+        </div>
 
 
-            <div class="col-md-3">
-                <img src="/public/image/<%=getData.db_upload_img %>" width="100" height="100" 
+
+        <div class="col-md-3">
+            <img src="/public/image/<%=getData.db_upload_img %>" width="100" height="100"
                 class="rounded-start img-fluid" alt="서적 이미지">
-            </div>
+        </div>
 
-            <div class="mb-3">
-                <label for="formFile" class="form-label">이미지</label>
-                <input class="form-control" type="file" id="formFile" name="img" value="/public/image/<%=getData.db_upload_img %>">
-            </div>
+        <div class="mb-3">
+            <label for="formFile" class="form-label">이미지</label>
+            <input class="form-control" type="file" id="formFile" name="img"
+                value="<%=getData.db_upload_img %>">
+        </div>
+
+        <div>
+            <input class="form-control" type="hidden" id="formFile" name="img_holder"
+            value="<%=getData.db_upload_img %>">
+        </div>
 
 
-            <!-- <img src="<%= getData.db_upload_Image %>" alt="이미지"> -->
+        <!-- <img src="<%= getData.db_upload_Image %>" alt="이미지"> -->
 
-            <!-- <form action="/edit" method="post" enctype="multipart/form-data">
+        <!-- <form action="/edit" method="post" enctype="multipart/form-data">
                 <label for="image">Select an image to upload:</label>
                 <input type="file" name="image" id="image">
                 <input type="hidden" name="id" value="<%= getData.db_upload_Id %>">
@@ -92,58 +107,63 @@
             </form> -->
 
 
-            <div class="mb-3">
-                <label for="Textarea1" class="form-label">게시글 작성</label>
-                <textarea id="Textarea" type="text" class="form-control" style="height: 200px;"  rows="3" name="comment"><%= getData.db_upload_Comment %></textarea>
-            </div>
+        <div class="mb-3">
+            <label for="Textarea1" class="form-label">게시글 작성</label>
+            <textarea id="Textarea" type="text" class="form-control" style="height: 200px;" rows="3"
+                name="comment"><%= getData.db_upload_Comment %></textarea>
+        </div>
+
+
+        <div class="col-12 text-center">
+            <button type="submit" class="btn btn-outline-light">업로드</button>
+        </div>
+
+    </form>
 
 
 
-
-            <div class="col-12">
-                <button type="submit" class="btn btn-outline-light position-absolute bottom-0 end-0">
-                    <!-- <a class="nav-link">업로드</a> -->
-                    업로드
-                </button>
-            </div>
-
-        </form>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-            crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
         </script>
 
-        <!-- Load jquery -->
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <!-- Load jquery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 
-        <!-- Act -->
-        <script>
-            var CHK_cufoff = ("<%= getData.db_upload_isCutoff %>")
-            var CHK_disColor = ("<%= getData.db_upload_isDiscolor %>")
-            var CHK_Doodle = ("<%= getData.db_upload_isDoodle %>")
-            var CHK_Bookbinding = ("<%= getData.db_upload_isBookbinding %>")
-            var CHK_arr = [CHK_cufoff, CHK_disColor, CHK_Doodle, CHK_Bookbinding]
-            // console.log(CHK_arr)
-            const isturnOn = 'on'
+    <script>
+        // const imgInput = document.querySelector('input[name="img"]');
+        // const imgNameInput = document.querySelector('input[name="img_name"]');
+        
+        // imgInput.addEventListener('change', () => {
+        // imgNameInput.value = imgInput.value;
+        // });
+    </script>
 
-            for(let i = 0; i < CHK_arr.length; i++) {
-                console.log(CHK_arr[i])
-                
-                if(CHK_arr[i] == isturnOn) {
-                    console.log("Cutoff YES" + i);
-                    $("#gridCheck" + i).prop("checked",1);
-                    $("#gridCheck" + i).prop("value",1);
-                }
 
-                else {
-                    console.log("Cutoff NO" + i);
-                    $("#gridCheck" + i).prop("checked",0);
-                    $("#gridCheck" + i).prop("value",0);
-                }
+    <script>
+        var CHK_cufoff = ("<%= getData.db_upload_isCutoff %>")
+        var CHK_disColor = ("<%= getData.db_upload_isDiscolor %>")
+        var CHK_Doodle = ("<%= getData.db_upload_isDoodle %>")
+        var CHK_Bookbinding = ("<%= getData.db_upload_isBookbinding %>")
+        var CHK_arr = [CHK_cufoff, CHK_disColor, CHK_Doodle, CHK_Bookbinding]
+        // console.log(CHK_arr)
+        const isturnOn = 'on'
+
+        for (let i = 0; i < CHK_arr.length; i++) {
+            console.log(CHK_arr[i])
+
+            if (CHK_arr[i] == isturnOn) {
+                console.log("Cutoff YES" + i);
+                $("#gridCheck" + i).prop("checked", 1);
+                $("#gridCheck" + i).prop("value", "on");
             }
 
-        </script>
+            else {
+                console.log("Cutoff NO" + i);
+                $("#gridCheck" + i).prop("checked", 0);
+                $("#gridCheck" + i).prop("value", null);
+            }
+        }
+    </script>
 </body>
 
 </html>
