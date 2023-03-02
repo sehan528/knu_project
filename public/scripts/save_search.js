@@ -1,11 +1,9 @@
 $(document).ready(function () {
-
     // 최근 검색어 목록 가져오기
     var recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
 
     // 최근 검색어 목록 표시
     var todoList = $("#todo-list");
-
 
 
 
@@ -20,7 +18,9 @@ $(document).ready(function () {
                 .attr("onclick", "searchWithKeyword('" + recentSearches[i] + "')")
                 .click(function() {
                     var keyword = $(this).text();
-                    var url = "/book_search?value=" + encodeURIComponent(keyword);
+                    // var url = "/book_search?value=" + encodeURIComponent(keyword);
+                    var url = "/book_search?value=" + encodeURIComponent(keyword) + "&store=" + encodeURIComponent(store);
+
                     window.location.href = url;
                 })
                 
@@ -30,11 +30,11 @@ $(document).ready(function () {
         todoList.append(listItem);
 
         function searchWithKeyword(keyword) {
-            var url = "/book_search?value=" + encodeURIComponent(keyword);
+            // var url = "/book_search?value=" + encodeURIComponent(keyword);
+            var url = "/book_search?value=" + encodeURIComponent(keyword) + "&store=" + encodeURIComponent(store);
             window.location.href = url;
         }
     }
-
 
 
 
@@ -63,7 +63,9 @@ $(document).ready(function () {
         localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
 
         // 검색어로 재검색
-        var url = "/book_search?value=" + encodeURIComponent(newKeyword);
+        // var url = "/book_search?value=" + encodeURIComponent(newKeyword);
+        var url = "/book_search?value=" + encodeURIComponent(newKeyword) + "&store=" + encodeURIComponent(store);
+
         window.location.href = url;
     });
 
