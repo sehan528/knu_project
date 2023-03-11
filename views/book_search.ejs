@@ -74,6 +74,10 @@
             <div class="wrapper">
                 <div class="form-group has-search" style="max-width: 500px;">
 
+
+                    <h3><%= now_keyword %></h3>
+
+
                     <form class="form">
                         <input required maxlength="10" type="text" class="form-control card-t" name="value" placeholder="Search" onkeydown="search(event)">
                     </form>
@@ -136,9 +140,7 @@
                         </div>
                     </div>
                 </div>
-                <% } %>
-                
-                
+            <% } %>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
@@ -161,6 +163,11 @@
         </script> -->
 
         <script src="/public/scripts/save_search.js"></script>
+
+        <script> 
+            var nowKeyword = '<%= now_keyword %>';
+        
+        </script>
 
 
 </body>

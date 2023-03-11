@@ -263,7 +263,7 @@ app.post('/used_write', upload.single('img'), function(req,res) {
             })
         });
     });
-    console.log(res);
+    // console.log(res);
     res.redirect('/used_book')
 });
 
@@ -278,7 +278,7 @@ app.get('/used_view/:Viewid', (req,res) => {
 // ------------------------------------------------------------------------------------------------------------------
 
 /** 정보 수정을 위한 데이터  DB -> 클라  */
-app.get('/edit/:Viewid',function(req, res) {
+app.get('/edit/:Viewid',logincheck, function(req, res) {
     db.collection('DB_bookUpload').findOne({db_upload_post : parseInt(req.params.Viewid)}, function(err, result) {
         // console.log(result);
         res.render('edit.ejs', {getData : result});
@@ -364,7 +364,7 @@ app.put('/edit' , upload.single('img'), function(req, res) {
     
 });
 
-app.delete('/delete', function(req, res) {
+app.delete('/delete', logincheck, function(req, res) {
     req.body._id = parseInt(req.body._id);
     var postId = {db_upload_post : req.body._id};
     console.log(postId);

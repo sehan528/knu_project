@@ -11,6 +11,10 @@ router.get('/', function(req, res) {
     const SN = req.query.value;
     let store = req.query.store;
 
+    // if(typeof SN === 'undefined') {
+    //     res.render('book_search.ejs' , {data : '', name: '' , now_keyword: '', now_store: ''} )
+    // }
+
 
 
     const getHTML = async(keyword) => {
@@ -94,9 +98,20 @@ router.get('/', function(req, res) {
         }
 
 
-        res.render('book_search.ejs' , {data : courses, name: req.query.value, now_keyword: SN, now_store: store} )
+        // res.render('book_search.ejs' , {data : courses, name: req.query.value, now_keyword: SN, now_store: store} )
+        if(typeof SN === 'undefined') {
+            res.render('book_search.ejs', {data: '', name: '', now_keyword: '', now_store: ''});
+        } else {
+            res.render('book_search.ejs', {data: courses, name: req.query.value, now_keyword: SN, now_store: store});
+        }
     }
+
     parsing(req.query.value);
+
+
+
+
+
 
 });
 
