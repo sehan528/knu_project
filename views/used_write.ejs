@@ -7,15 +7,11 @@
     <title>중고서적 작성</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     
+    <link rel="stylesheet" href="/public/main.css">
     <style>
       .main {
           width: 60%;
           margin: 20px auto;
-      }
-      .form-control2 {
-          height: 400px; 
-          padding-left: 10px;
-          color: aliceblue;
       }
     </style>
 
@@ -23,25 +19,25 @@
 
 <!-- book_name book_author book_price isCutoff isDiscolor isDoodle isBookbinding img comment -->
 
-<body class="bg-dark">
+<body class="bg-main">
 
     <%- include('nav2.html') %>
 
-  <form class="row g-3 text-white main" method="POST" action="/used_write" enctype="multipart/form-data">
+  <form class="row g-3 main" method="POST" action="/used_write" enctype="multipart/form-data">
     
     <div class="col-md-6">
       <label for="book-name" class="form-label">책 제목</label>
-      <input type="text" class="form-control" id="book-name" name="book_name">
+      <input type="text" class="form-control card-t" id="book-name" name="book_name">
     </div>
 
     <div class="col-md-6">
       <label for="book-author" class="form-label">저자</label>
-      <input type="text" class="form-control" id="book-author" name="book_author">
+      <input type="text" class="form-control card-t" id="book-author" name="book_author">
     </div>
 
     <div class="col-12">
       <label for="price" class="form-label">희망 가격</label>
-      <input type="text" class="form-control" id="price" name="book_price">
+      <input type="text" class="form-control card-t" id="price" name="book_price">
     </div>
 
     <div class="row mb-3">
@@ -70,16 +66,16 @@
 
     <div class="mb-3">
         <label for="formFile" class="form-label">이미지</label>
-        <input class="form-control" type="file" id="formFile" name="img">
+        <input class="form-control card-t" type="file" id="formFile" name="img">
     </div>
 
     <div class="mb-3">
         <label for="Textarea1" class="form-label">게시글 작성</label>
-        <textarea class="form-control" style="height: 200px;" id="Textarea" rows="3" name="comment"> </textarea>
+        <textarea class="form-control card-t" style="height: 200px;" id="Textarea" rows="3" name="comment"> </textarea>
     </div>
     
     <div class="col-12 text-center">
-      <button type="submit" class="btn btn-outline-light" >
+      <button type="submit" class="btn btn-outline-light card-t" >
         <!-- <a class="nav-link">업로드</a> -->
         업로드
       </button>

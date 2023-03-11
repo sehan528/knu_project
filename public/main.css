@@ -1,0 +1,42 @@
+/*배경 설정*/
+.bg-main {
+    background-color: aliceblue;
+    background-image: url("https://cdn.pixabay.com/photo/2016/11/21/14/12/books-1845614_1280.jpg");
+    background-size : 100%;
+}
+/* 메뉴 글자 설정*/
+.menustyle{
+    font-weight: 700;
+    font-family: serif;
+    color:black;
+}
+/* 기본 body 설정 값*/
+.main {
+    width: 75%;
+    margin: 20px auto;
+}
+/* 검색창 설정 */
+.has-search .form-control {
+    height: 45px;
+    padding-left: 2.375rem;
+    font-size: 15px;
+    border-radius: 15px;
+    padding-left: 10px;
+    color: rgb(15, 16, 16);
+}
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+}
+/* card-body의 테두리 설정 */
+.card-t {
+    border: 6px solid;
+    color: black;
+}
+

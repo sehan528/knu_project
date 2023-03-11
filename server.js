@@ -7,6 +7,7 @@ const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
 
+
 const methodOverride = require('method-override')
 app.use(methodOverride('_method'))
 
@@ -15,9 +16,10 @@ app.use(methodOverride('_method'))
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 
-
 var db;
-MongoClient.connect("mongodb+srv://admin:1q2w3e4r@cluster0.dh8gyjd.mongodb.net/test", function(에러,client) {
+MongoClient.connect(
+    "mongodb+srv://admin:1q2w3e4r@cluster0.dh8gyjd.mongodb.net/test", 
+    function(에러,client) {
     // 에러 = 에러가 발생했을 시 해당 URL을 출력 해줄 것.
     if(에러) {return console.log(에러)};
     db = client.db('KNUDB');

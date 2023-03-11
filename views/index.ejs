@@ -6,72 +6,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>다나와</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/main.css">
+
     <style>
-        h1 {
-            color: aliceblue;
-        }
-
-        .b1 {
+        /* 타이틀 글자 설정*/
+        .titlestyle {
             text-align: center;
+            font-family: serif;
             margin-top: 190px;
-        }
-
-        .main {
-            width: 55%;
-            margin: 30px auto;
-        }
-
-        .has-search .form-control {
-            height: 45px;
-            padding-left: 2.375rem;
-            font-size: 15px;
-            border-radius: 15px;
-            padding-left: 10px;
-            color: aliceblue;
-        }
-
-        .has-search .form-control-feedback {
-            position: absolute;
-            z-index: 2;
-            display: block;
-            width: 2.375rem;
-            height: 2.375rem;
-            line-height: 2.375rem;
-            text-align: center;
-            pointer-events: none;
-            color: #aaa;
+            color: black;
         }
     </style>
 </head>
 
-<body class="bg-dark">
+<body class="bg-main">
 
     <%- include('nav.html') %>
+    <div class="titlestyle">
+        <div class="display-2">Major Book</div>
+        <div class="display-2">DANAWA</div>
+    </div>
 
-        <div class="b1">
-            <h1 class="display-2">Major Book</h1>
-            <h1 class="display-2">DANAWA!</h1>
-        </div>
-
-        <div class="main">
-            <div class="form-group has-search">
-                <span class="fa fa-search form-control-feedback"></span>
-
-                <div id="recent-searches">
-                    <form method="get" action="/book_search">
-                        <input type="text" class="form-control bg-dark" name="value" placeholder="Search">
-                    </form>
-                </div>
-
+    <div class="main">
+        <div class="form-group has-search">
+            <span class="fa fa-search form-control-feedback"></span>
+            <div id="recent-searches">
+                <form method="get" action="/book_search">
+                    <input type="text" class="form-control card-t" name="value" placeholder="Search">
+                </form>
             </div>
-            <p class="mt-4 text-center"><a href="https://www.google.co.kr/">I'll google</a></p>
-        </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-            crossorigin="anonymous"></script>
+        </div>
+        <p class="mt-4 text-center"><a href="https://www.google.co.kr/">I'll google</a></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous">
+    </script>
+    
 </body>
 
 <script>

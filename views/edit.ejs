@@ -8,31 +8,15 @@
     <title>중고서적 수정</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-
-    <style>
-        .main {
-            width: 60%;
-            margin: 20px auto;
-        }
-
-        .form-control2 {
-            height: 400px;
-            padding-left: 10px;
-            color: aliceblue;
-        }
-
-        /* input[type=file] {
-            display: none;
-        } */
-    </style>
+    <link rel="stylesheet" href="/public/main.css">
 
 </head>
 
-<body class="bg-dark">
+<body class="bg-main">
 
     <!-- <%- include('nav2.html') %> -->
 
-    <form class="row g-3 text-white main" action="/edit?_method=PUT" method="POST" enctype="multipart/form-data">
+    <form class="row g-3 main" action="/edit?_method=PUT" method="POST" enctype="multipart/form-data">
 
         <input type="hidden" value="<%= getData.db_upload_post %>" name="post_number"></input>
 
