@@ -55,7 +55,7 @@ router.get('/', function(req, res) {
                 // date: $(node).find("div > div.item_info > div.info_row.info_pubGrp > span.authPub.info_date").text(),
                 price: $(node).find("div > div.item_info > div.info_row.info_price > span:nth-child(1) > strong > em").text(),
                 img: $(node).find('em > img').attr('data-original'),
-                link : $(node).find("div > div.item_info > div.info_row.info_storeLoca > dl > dd > span > a").attr('href'),
+                link : "http://www.yes24.com" + $(node).find("div > div.item_info > div.info_row.info_storeLoca > dl > dd > span > a").attr('href'),
                 marker : store
                 })
             });
