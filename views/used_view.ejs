@@ -24,9 +24,9 @@
 
             <!-- 제목, 작성자, 저자, 출판사, 출판일, 가격 작성 -->
             <div class="col-md-6" align="left">
-                <h5 class="card-title">
-                    <%= getData.db_upload_Name %>
-                </h5>
+                <h5 class="card-title"><%= getData.db_upload_Name %></h5>
+                <!-- <h5 class="card-title"><%= getData.db_uploader_ID %></h5> -->
+
                 <p class="card-text">
                 <div><small class="text-muted">작성자: <%= getData.db_uploader %></small></div>
                 <div><small class="text-muted">저자: <%= getData.db_upload_Author %></small></div>
@@ -46,7 +46,8 @@
                 </p>
                 <button class="btn btn-outline-light" type="button">
                     <!-- 추후에 기능 추가 -->
-                    <a class="nav-link" href="main.html">판매자에게 메시지 보내기</a>
+                    <a class="nav-link chat" data-id="<%= getData.db_uploader_ID %>">판매자에게 메시지 보내기</a>
+
                 </button>
             </div>
 
@@ -76,9 +77,23 @@
         </div>
 
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-            crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script> -->
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+        
+        <script>
+            $('.chat').click(function (e) {
+                var id = e.target.dataset.id;
+                var title = $('h5.card-title').eq(0).text();
+                console.log(id);
+                console.log(title);
+                $.post('/chatList', {Receiver : id, bookName : title}).then(() => {
+                    console.log("전송완료");
+                });
+            });
+        </script>
 </body>
 
 </html>

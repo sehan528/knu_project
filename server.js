@@ -106,7 +106,7 @@ app.get('/user_page' , logincheck, function(req, res) {
 
 app.get('/user_messenger' , logincheck, function(req, res) {
     
-    db.collection('DB_bookUpload').find().toArray(function(err, result) {
+    db.collection('DB_chatList').find().toArray(function(err, result) {
         // console.log(result);
         // console.log(req.user);
         res.render('user_messenger.ejs' , { posts : result, 사용자 : req.user });  // 찾은걸 ejs file에 넣어주세요.
@@ -237,7 +237,7 @@ var upload = multer({
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 /** 새 글 작성  */
-app.post('/used_write', upload.single('img'), function(req,res) {
+app.post('/used_write', logincheck, upload.single('img'), function(req,res) {
     
     db.collection('DB_postCount').findOne({name : 'DB_PSCNT'}, function(err,res1) {
         var GET_PSCNT = res1.totalPost;
@@ -245,6 +245,7 @@ app.post('/used_write', upload.single('img'), function(req,res) {
         var post = {
             db_upload_post : GET_PSCNT + 1,
             db_uploader : req.user.db_id,
+            db_uploader_ID : req.user._id,
             db_upload_Name : req.body.book_name, 
             db_upload_Author : req.body.book_author, 
             db_upload_Price : req.body.book_price, 
@@ -253,7 +254,8 @@ app.post('/used_write', upload.single('img'), function(req,res) {
             db_upload_isDoodle : req.body.isDoodle,
             db_upload_isBookbinding : req.body.isBookbinding,
             db_upload_img : req.file.filename,
-            db_upload_Comment : req.body.comment
+            db_upload_Comment : req.body.comment,
+            db_is_Sell : null
         }
 
         db.collection('DB_bookUpload').insertOne(post,function(err, res) {
@@ -380,8 +382,87 @@ app.delete('/delete', logincheck, function(req, res) {
     });
 });
 
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+/** 메신져  */
+
+const { ObjectId } = require('mongodb');
+// mongodb의 objectId 자료형으로 담을 수 있게끔 지원된 기능을 가져옵니다 = mongodb로 부터... (몽고디비에 의해 만들어진 기능.)
+
+app.post('/chatList', logincheck, function(req, res) {
+
+    // DB 탐색해서 bookName 이미 있으면 못하게 해야함!!! <- 이후 추가.
+
+
+    // console.log(req.user);
+    // console.log(req.body);
+    var CHATINFO = {
+        chat_Title : (req.body.bookName),
+        member : [ObjectId(req.body.Receiver), req.user._id],
+        // 받은 사람 , 건 사람
+        date : new Date()
+    }
+    console.log(CHATINFO);
+
+    db.collection('DB_chatList').insertOne(CHATINFO).then((result)=>{
+        res.send('DB_chatList 신규 등록. 대화방이 생성되었음.');
+        // res.render('/user_chat.ejs');
+    })
+});
 
 
 
+app.get('/user_chat', logincheck, function (req, res) {
+    db.collection('DB_chatList').find({ member : req.user._id }).toArray().then((result) => {
+        console.log(req.user._id);
+        console.log(result);
+        res.render('user_chat.ejs', { data: result , host : req.user._id})
+    })
+}); 
 
 
+app.post('/message', logincheck, function (req, res) {
+    // console.log(req);
+    var generateChat = {
+        parent: req.body.parent,
+        userid: req.user._id,
+        content: req.body.content,
+        date: new Date(),
+    }
+    db.collection('DB_message').insertOne(generateChat)
+        .then((result) => {
+            res.send(result);
+        })
+}); 
+
+app.get('/message/:CHATID', logincheck, function(req, res){
+
+    res.writeHead(200, {
+        "Connection": "keep-alive",
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+    });
+
+    db.collection('DB_message').find({ parent : req.params.CHATID }).toArray()
+    .then((result)=>{
+        res.write('event: test\n');
+        res.write('data:'+ JSON.stringify(result) + '\n\n');    
+    })
+
+    const pipeline = [
+        { $match : {'fullDocument.parent' : req.params.CHATID} }
+        // fullDocument. 사용자 입력 -> $match의 내용이 추가/수정/삭제 시 changeStream 작동.
+    ];
+
+    const collection = db.collection('DB_message');
+    const changeStream = collection.watch(pipeline);
+    changeStream.on('change', (result)=> {
+        // result.fullDocument
+        res.write('event: test\n');
+        res.write('data:'+ JSON.stringify([result.fullDocument]) + '\n\n');    
+        console.log(result.fullDocument);
+    });
+
+});
