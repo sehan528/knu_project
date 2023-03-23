@@ -40,3 +40,20 @@
     color: black;
 }
 
+/*애니메이션*/
+.abox{
+    position: relative;
+    animation-name: move, fadeOut;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+}
+
+@keyframes move {
+    from { top: 200px; }
+    to   { top: 0; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
