@@ -1,15 +1,19 @@
 const express = require('express');
 const app = express();
-const bodyParser= require('body-parser')
-app.use(bodyParser.urlencoded({extended: true}))
-const MongoClient = require('mongodb').MongoClient;
-
 app.set('view engine', 'ejs');
+// /public 경로에 있는 파일들을 static 파일로 제공
 app.use('/public', express.static('public'));
 
+const bodyParser= require('body-parser')
+app.use(bodyParser.urlencoded({extended: true}))
+
+const MongoClient = require('mongodb').MongoClient;
 
 const methodOverride = require('method-override')
 app.use(methodOverride('_method'))
+
+
+
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -34,6 +38,23 @@ MongoClient.connect(
 app.get('/', (req,res) => {
     res.render('index.ejs', {welcomeid : "TEST"});
 });
+
+// Service worker 파일을 로드
+// app.get('/server-worker.js', (req, res) => {
+//     res.sendFile('/views/server-worker.js');
+// });
+
+// offline.html 파일을 로드
+app.get('/offline.html', (req, res) => {
+    res.sendFile('/offline.html', { root: __dirname });
+});
+
+// 서비스 워커 등록 요청이 들어올 때 Service-Worker-Allowed 헤더 설정
+app.get('/sw.js', (req, res) => {
+    res.setHeader('Service-Worker-Allowed', '/');
+    res.sendFile(__dirname + '/sw.js');
+});
+
 
 
 app.get('/used_book', (req,res) => {
