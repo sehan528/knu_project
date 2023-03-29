@@ -42,6 +42,52 @@
           window.location.href = url;
         }
       }
+
+      function button1Clicked() {
+        remove();
+        const outputDiv = document.getElementById("output");
+        const newDiv = document.createElement("div");
+        newDiv.innerHTML = "a";
+        outputDiv.appendChild(newDiv);
+      }
+
+      function button2Clicked() {
+        remove();
+        const outputDiv = document.getElementById("output");
+        const newDiv = document.createElement("div");
+        newDiv.innerHTML =
+          '<% for (var i= 10 ; i < Math.min(data.length); i++) { %><div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href=\'http://www.yes24.com/<%=data[i].link %>\'" data-spy="scroll" data-target="#navbar-example2" data-offset="0"><div class="row g-2 card-t"><div class="col-4"><img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..."/></div><div class="col-8" align="left"><div class="card-body"><h5 class="card-title"><%=data[i].title%></h5><p class="card-text"><%=data[i].author%></p><p class="card-text"><%=data[i].price%>원</p><p class="card-text"><small class="text-muted"> <%=now_store%> </small></p></div></div></div></div><% } %>';
+
+        outputDiv.appendChild(newDiv);
+      }
+
+      function button3Clicked() {
+        remove();
+        const outputDiv = document.getElementById("output");
+        const newDiv = document.createElement("div");
+        newDiv.innerHTML =
+          '<% for (var i= 20 ; i < Math.min(data.length); i++) { %><div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href=\'http://www.yes24.com/<%=data[i].link %>\'" data-spy="scroll" data-target="#navbar-example2" data-offset="0"><div class="row g-2 card-t"><div class="col-4"><img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..."/></div><div class="col-8" align="left"><div class="card-body"><h5 class="card-title"><%=data[i].title%></h5><p class="card-text"><%=data[i].author%></p><p class="card-text"><%=data[i].price%>원</p><p class="card-text"><small class="text-muted"> <%=now_store%> </small></p></div></div></div></div><% } %>';
+
+        outputDiv.appendChild(newDiv);
+      }
+      function button4Clicked() {
+        remove();
+        const outputDiv = document.getElementById("output");
+        const newDiv = document.createElement("div");
+        newDiv.innerHTML =
+          '<% for (var i= 30 ; i < Math.min(data.length); i++) { %><div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href=\'http://www.yes24.com/<%=data[i].link %>\'" data-spy="scroll" data-target="#navbar-example2" data-offset="0"><div class="row g-2 card-t"><div class="col-4"><img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..."/></div><div class="col-8" align="left"><div class="card-body"><h5 class="card-title"><%=data[i].title%></h5><p class="card-text"><%=data[i].author%></p><p class="card-text"><%=data[i].price%>원</p><p class="card-text"><small class="text-muted"> <%=now_store%> </small></p></div></div></div></div><% } %>';
+
+        outputDiv.appendChild(newDiv);
+      }
+      function button5Clicked() {
+        remove();
+        const outputDiv = document.getElementById("output");
+        const newDiv = document.createElement("div");
+        newDiv.innerHTML =
+          '<% for (var i= 40 ; i < Math.min(data.length); i++) { %><div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href=\'http://www.yes24.com/<%=data[i].link %>\'" data-spy="scroll" data-target="#navbar-example2" data-offset="0"><div class="row g-2 card-t"><div class="col-4"><img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..."/></div><div class="col-8" align="left"><div class="card-body"><h5 class="card-title"><%=data[i].title%></h5><p class="card-text"><%=data[i].author%></p><p class="card-text"><%=data[i].price%>원</p><p class="card-text"><small class="text-muted"> <%=now_store%> </small></p></div></div></div></div><% } %>';
+
+        outputDiv.appendChild(newDiv);
+      }
     </script>
     <style>
       /* 도서 사이트 버튼 설정*/
@@ -145,7 +191,7 @@
         </div>
       </div>
 
-      <% for (var i=0; i < data.length; i++) { %>
+      <% for (var i=0; i < 10; i++) { %>
       <div
         class="border border-white"
         style="max-width: 500px; margin: 10px auto"
@@ -178,6 +224,12 @@
       <% } %>
     </div>
 
+    <button onclick="button1Clicked()">1</button>
+    <button onclick="button2Clicked()">2</button>
+    <button onclick="button3Clicked()">3</button>
+    <button onclick="button4Clicked()">4</button>
+    <button onclick="button5Clicked()">5</button>
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
@@ -187,23 +239,10 @@
     <!-- Load jquery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 
-    <!-- <script>
-            const searchButtons = document.querySelectorAll('.search-button');
-            const storeInput = document.querySelector('#store-input');
-
-            searchButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const site = button.getAttribute('data-site');
-                    storeInput.value = site;
-                });
-            });
-        </script> -->
-
     <script src="/public/scripts/save_search.js"></script>
 
     <script>
       var nowKeyword = "<%= now_keyword %>";
     </script>
-
   </body>
 </html>
