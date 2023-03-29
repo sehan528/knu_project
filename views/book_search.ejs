@@ -53,6 +53,7 @@
         const now_store = "예스24";
 
         function displayData(page) {
+
         const outputDiv = document.getElementById("output");
         const start = (page - 1) * 10;
         const dataSize = "<%= data ? data.length : 0 %>";
@@ -86,13 +87,12 @@
         const dataSize = "<%= data ? data.length : 0 %>";
         const data = <%- JSON.stringify(data) %>;
         const now_store = "예스24";
-
         const buttonsContainer = document.getElementById("buttons");
         for (let i = 1; i <= Math.ceil(dataSize / 10); i++) {
           const start = (i - 1) * 10 + 1;
           const end = Math.min(start + 10, data.length);
           const buttonHtml = `
-            <button id="button${i}" onclick="displayData(${i})">${start}~${end}</button>
+            <button id="button${i}" onclick="displayData(${i})">${start}</button>
           `;
           if (buttonsContainer) {
             buttonsContainer.innerHTML += buttonHtml;
