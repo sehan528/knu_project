@@ -24,104 +24,81 @@
     <link rel="stylesheet" href="/public/main.css" />
 
     <script>
-      let store = "<%= now_store %>" || "yes24";
-      console.log(store); // ejs render 된 값이 없다면 yes24.
+                  let store = "<%= now_store %>" || "yes24";
+                  console.log(store); // ejs render 된 값이 없다면 yes24.
 
-      function changeStore(value) {
-        store = value;
-        console.log(store);
-      }
+                  function changeStore(value) {
+                    store = value;
+                    console.log(store);
+                  }
 
-      function search(event) {
-        if (event.keyCode === 13) {
-          console.log(store);
-          const form = document.querySelector(".form");
-          const inputValue = form.querySelector('input[name="value"]').value;
-          const url = `/book_search?value=${inputValue}&store=${store}`;
-          window.location.href = url;
+                  function search(event) {
+                    if (event.keyCode === 13) {
+                      console.log(store);
+                      const form = document.querySelector(".form");
+                      const inputValue = form.querySelector('input[name="value"]').value;
+                      const url = `/book_search?value=${inputValue}&store=${store}`;
+                      window.location.href = url;
+                    }
+                  }
+
+
+                  // 출력된 결과물을 지우는 함수
+        function remove() {
+          const outputDiv = document.getElementById("output");
+          while (outputDiv.firstChild) {
+            outputDiv.removeChild(outputDiv.firstChild);
+          }
+        }
+        const now_store = "예스24";
+
+        function displayData(page) {
+        const outputDiv = document.getElementById("output");
+        const start = (page - 1) * 10;
+        const dataSize = "<%= data ? data.length : 0 %>";
+        const data = <%- JSON.stringify(data) %>;
+        const end = Math.min(start + 10, dataSize);
+
+        remove()
+
+        for (let i = start; i < end; i++) {
+          const newDiv = document.createElement("div");
+          newDiv.innerHTML = `
+            <div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href='http://www.yes24.com/${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+              <div class="row g-2 card-t">
+                <div class="col-4"><img src="${data[i].img}" class="rounded-start img-fluid" alt="..."/></div>
+                <div class="col-8" align="left">
+                  <div class="card-body">
+                    <h5 class="card-title">${data[i].title}</h5>
+                    <p class="card-text">${data[i].author}</p>
+                    <p class="card-text">${data[i].price}원</p>
+                    <p class="card-text"><small class="text-muted">${now_store}</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          outputDiv.appendChild(newDiv);
         }
       }
 
       window.onload = function () {
-        window.dataSize = "<%= data ? data.length : 0 %>";
+        const dataSize = "<%= data ? data.length : 0 %>";
+        const data = <%- JSON.stringify(data) %>;
+        const now_store = "예스24";
 
         const buttonsContainer = document.getElementById("buttons");
         for (let i = 1; i <= Math.ceil(dataSize / 10); i++) {
           const start = (i - 1) * 10 + 1;
-          const end = Math.min(i * 10, dataSize);
-
-          // 각 버튼에 대한 HTML을 생성합니다.
+          const end = Math.min(start + 10, data.length);
           const buttonHtml = `
-      <button onclick="button${i}Clicked()">${start}~${end}</button>
-    `;
-
+            <button id="button${i}" onclick="displayData(${i})">${start}~${end}</button>
+          `;
           if (buttonsContainer) {
             buttonsContainer.innerHTML += buttonHtml;
           }
         }
       };
-
-      // 버튼 1에 대한 함수
-      function button1Clicked() {
-        remove();
-        const outputDiv = document.getElementById("output");
-        const newDiv = document.createElement("div");
-        newDiv.innerHTML =
-          '<% for (var i= 0 ; i < Math.min(data.length, 10); i++) { %><div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href=\'http://www.yes24.com/<%=data[i].link %>\'" data-spy="scroll" data-target="#navbar-example2" data-offset="0"><div class="row g-2 card-t"><div class="col-4"><img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..."/></div><div class="col-8" align="left"><div class="card-body"><h5 class="card-title"><%=data[i].title%></h5><p class="card-text"><%=data[i].author%></p><p class="card-text"><%=data[i].price%>원</p><p class="card-text"><small class="text-muted"> <%=now_store%> </small></p></div></div></div></div><% } %>';
-
-        outputDiv.appendChild(newDiv);
-      }
-
-      // 버튼 2에 대한 함수
-      function button2Clicked() {
-        remove();
-        const outputDiv = document.getElementById("output");
-        const newDiv = document.createElement("div");
-        newDiv.innerHTML =
-          '<% for (var i= 10 ; i < Math.min(data.length, 20); i++) { %><div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href=\'http://www.yes24.com/<%=data[i].link %>\'" data-spy="scroll" data-target="#navbar-example2" data-offset="0"><div class="row g-2 card-t"><div class="col-4"><img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..."/></div><div class="col-8" align="left"><div class="card-body"><h5 class="card-title"><%=data[i].title%></h5><p class="card-text"><%=data[i].author%></p><p class="card-text"><%=data[i].price%>원</p><p class="card-text"><small class="text-muted"> <%=now_store%> </small></p></div></div></div></div><% } %>';
-
-        outputDiv.appendChild(newDiv);
-      }
-
-      // 버튼 3에 대한 함수
-      function button3Clicked() {
-        remove();
-        const outputDiv = document.getElementById("output");
-        const newDiv = document.createElement("div");
-        newDiv.innerHTML =
-          '<% for (var i= 20 ; i < Math.min(data.length, 30); i++) { %><div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href=\'http://www.yes24.com/<%=data[i].link %>\'" data-spy="scroll" data-target="#navbar-example2" data-offset="0"><div class="row g-2 card-t"><div class="col-4"><img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..."/></div><div class="col-8" align="left"><div class="card-body"><h5 class="card-title"><%=data[i].title%></h5><p class="card-text"><%=data[i].author%></p><p class="card-text"><%=data[i].price%>원</p><p class="card-text"><small class="text-muted"> <%=now_store%> </small></p></div></div></div></div><% } %>';
-
-        outputDiv.appendChild(newDiv);
-      }
-
-      // 버튼 4에 대한 함수
-      function button4Clicked() {
-        remove();
-        const outputDiv = document.getElementById("output");
-        const newDiv = document.createElement("div");
-        newDiv.innerHTML =
-          '<% for (var i= 30 ; i < Math.min(data.length, 40); i++) { %><div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href=\'http://www.yes24.com/<%=data[i].link %>\'" data-spy="scroll" data-target="#navbar-example2" data-offset="0"><div class="row g-2 card-t"><div class="col-4"><img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..."/></div><div class="col-8" align="left"><div class="card-body"><h5 class="card-title"><%=data[i].title%></h5><p class="card-text"><%=data[i].author%></p><p class="card-text"><%=data[i].price%>원</p><p class="card-text"><small class="text-muted"> <%=now_store%> </small></p></div></div></div></div><% } %>';
-
-        outputDiv.appendChild(newDiv);
-      }
-
-      // 버튼 5에 대한 함수
-      function button5Clicked() {
-        remove();
-        const outputDiv = document.getElementById("output");
-        const newDiv = document.createElement("div");
-        newDiv.innerHTML =
-          '<% for (var i= 40 ; i < Math.min(data.length, 50); i++) { %><div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href=\'http://www.yes24.com/<%=data[i].link %>\'" data-spy="scroll" data-target="#navbar-example2" data-offset="0"><div class="row g-2 card-t"><div class="col-4"><img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..."/></div><div class="col-8" align="left"><div class="card-body"><h5 class="card-title"><%=data[i].title%></h5><p class="card-text"><%=data[i].author%></p><p class="card-text"><%=data[i].price%>원</p><p class="card-text"><small class="text-muted"> <%=now_store%> </small></p></div></div></div></div><% } %>';
-        outputDiv.appendChild(newDiv);
-      }
-
-      // 출력된 결과물을 지우는 함수
-      function remove() {
-        const outputDiv = document.getElementById("output");
-        while (outputDiv.firstChild) {
-          outputDiv.removeChild(outputDiv.firstChild);
-        }
-      }
     </script>
     <style>
       /* 도서 사이트 버튼 설정*/
@@ -264,12 +241,6 @@
     </div>
 
     <div id="buttons"></div>
-
-    <!-- <button onclick="button1Clicked()">1</button>
-    <button onclick="button2Clicked()">2</button>
-    <button onclick="button3Clicked()">3</button>
-    <button onclick="button4Clicked()">4</button>
-    <button onclick="button5Clicked()">5</button> -->
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
