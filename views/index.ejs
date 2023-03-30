@@ -18,9 +18,26 @@
             color: black;
         }
     </style>
+
+    <!-- 웹 앱 매니페스트를 읽어 들이기 -->
+    <link rel="manifest" href="/public/manifest.json"/>
+    <!-- 서비스 워커를 등록 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function (registration) {
+                        console.log('서비스 워커 등록 완료:', registration.scope);
+                    }, function (err) {
+                        console.log('서비스 워커 등록 실패: ', err);
+                    });
+            });
+        }
+    </script>
+
 </head>
 
-<body class="bg-main">
+<body class="bg-main"> 
 
     <%- include('nav.html') %>
     <div class="titlestyle">

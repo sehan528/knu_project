@@ -149,7 +149,7 @@
       <div
         class="border border-white abox"
         style="max-width: 500px; margin: 10px auto"
-        onclick="location.href='http://www.yes24.com/<%=data[i].link %>'"
+        onclick="location.href='<%=data[i].link %>'"
         data-spy="scroll"
         data-target="#navbar-example2"
         data-offset="0"
@@ -171,6 +171,7 @@
               <p class="card-text">
                 <small class="text-muted"> <%=now_store%> </small>
               </p>
+              <!-- <p class="card-text"> <%=data[i].link %>" </p> -->
             </div>
           </div>
         </div>
@@ -206,5 +207,6 @@
     <script>
       var nowKeyword = "<%= now_keyword %>";
     </script>
+
   </body>
 </html>
