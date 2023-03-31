@@ -24,23 +24,23 @@
     <link rel="stylesheet" href="/public/main.css" />
 
     <script>
-                  let store = "<%= now_store %>" || "yes24";
-                  console.log(store); // ejs render 된 값이 없다면 yes24.
+      let store = "<%= now_store %>" || "yes24";
+      console.log(store); // ejs render 된 값이 없다면 yes24.
 
-                  function changeStore(value) {
-                    store = value;
-                    console.log(store);
-                  }
+      function changeStore(value) {
+        store = value;
+        console.log(store);
+      }
 
-                  function search(event) {
-                    if (event.keyCode === 13) {
-                      console.log(store);
-                      const form = document.querySelector(".form");
-                      const inputValue = form.querySelector('input[name="value"]').value;
-                      const url = `/book_search?value=${inputValue}&store=${store}`;
-                      window.location.href = url;
-                    }
-                  }
+      function search(event) {
+        if (event.keyCode === 13) {
+          console.log(store);
+          const form = document.querySelector(".form");
+          const inputValue = form.querySelector('input[name="value"]').value;
+          const url = `/book_search?value=${inputValue}&store=${store}`;
+          window.location.href = url;
+        }
+      }
 
 
                   // 출력된 결과물을 지우는 함수
@@ -65,7 +65,7 @@
         for (let i = start; i < end; i++) {
           const newDiv = document.createElement("div");
           newDiv.innerHTML = `
-            <div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href='http://www.yes24.com/${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+            <div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href='${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
               <div class="row g-2 card-t">
                 <div class="col-4"><img src="${data[i].img}" class="rounded-start img-fluid" alt="..."/></div>
                 <div class="col-8" align="left">
@@ -202,7 +202,6 @@
         </div>
       </div>
 
-
       <!-- 1) 기타 책은 10개 이하로 등록되어 10개로 짜를 수 없는 경우가 생겨서 예외처리가 필요했다.-->
       <div id="output">
         <div>
@@ -239,7 +238,6 @@
           <% } %>
         </div>
         <figuercaption> click </figuercaption>
-      
       </div>
     </div>
 
