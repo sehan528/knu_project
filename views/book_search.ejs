@@ -209,14 +209,14 @@
           <% for (var i=0; i < Math.min(data.length, 10); i++) { %>
 
           <div
-            class="border border-white abox"
+            class="border border-white abox tbox"
             style="max-width: 500px; margin: 10px auto"
             onclick="location.href='http:<%=data[i].link %>'"
             data-spy="scroll"
             data-target="#navbar-example2"
             data-offset="0"
           >
-            <div class="row g-2 card-t tbox">
+            <div class="row g-2 card-t">
               <div class="col-4">
                 <img
                   src="<%=data[i].img %>"
@@ -235,13 +235,13 @@
                 </div>
               </div>
             </div>
-            <figuercaption> click </figuercaption>
 
           </div>
+          <figuercaption> click </figuercaption>
           <% } %>
         </div>
-        
-      
+
+
       </div>
     </div>
 
