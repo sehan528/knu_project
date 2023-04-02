@@ -58,14 +58,14 @@
       const start = (page - 1) * 10;
       const dataSize = "<%= data ? data.length : 0 %>";
       const data = <%- JSON.stringify(data) %>;
-      const end = Math.min(start + 10, dataSize);
+      const end = Math.min(start + 10, dataSize, (page * 10));
 
       remove()
 
       for (let i = start; i < end; i++) {
       const newDiv = document.createElement("div");
       newDiv.innerHTML = `
-      <div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href='http://www.yes24.com/${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+      <div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href='${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
       <div class="row g-2 card-t">
       <div class="col-4"><img src="${data[i].img}" class="rounded-start img-fluid" alt="..."/></div>
       <div class="col-8" align="left">
@@ -85,7 +85,7 @@
       const buttonsContainer = document.getElementById("buttons");
       buttonsContainer.innerHTML = "";
 
-      const numPages = Math.ceil(dataSize / 10);
+      const numPages = dataSize < 10 ? 1 : Math.ceil(dataSize / 10);
       const maxButtons = 3;
 
       let startPage = page - Math.floor(maxButtons / 2);
