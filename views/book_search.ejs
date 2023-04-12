@@ -24,116 +24,117 @@
     <link rel="stylesheet" href="/public/main.css" />
 
     <script>
-      let store = "<%= now_store %>" || "yes24";
-      console.log(store); // ejs render 된 값이 없다면 yes24.
+            let store = "<%= now_store %>" || "yes24";
+            console.log(store); // ejs render 된 값이 없다면 yes24.
 
-      function changeStore(value) {
-        store = value;
-        console.log(store);
-      }
+            function changeStore(value) {
+              store = value;
+              console.log(store);
+            }
 
-      function search(event) {
-        if (event.keyCode === 13) {
-          console.log(store);
-          const form = document.querySelector(".form");
-          const inputValue = form.querySelector('input[name="value"]').value;
-          const url = `/book_search?value=${inputValue}&store=${store}`;
-          window.location.href = url;
-        }
-      }
+            function search(event) {
+              if (event.keyCode === 13) {
+                console.log(store);
+                const form = document.querySelector(".form");
+                const inputValue = form.querySelector('input[name="value"]').value;
+                const url = `/book_search?value=${inputValue}&store=${store}`;
+                window.location.href = url;
+              }
+            }
 
 
-      // 출력된 결과물을 지우는 함수
-      function remove() {
-      const outputDiv = document.getElementById("output");
-      while (outputDiv.firstChild) {
-      outputDiv.removeChild(outputDiv.firstChild);
-      }
-      }
-      const now_store = "예스24";
+            // 출력된 결과물을 지우는 함수
+            function remove() {
+            const outputDiv = document.getElementById("output");
+            while (outputDiv.firstChild) {
+            outputDiv.removeChild(outputDiv.firstChild);
+            }
+            }
+            const now_store = "예스24";
 
-      function displayData(page) {
+            function displayData(page) {
 
-      const outputDiv = document.getElementById("output");
-      const start = (page - 1) * 10;
-      const dataSize = "<%= data ? data.length : 0 %>";
-      const data = <%- JSON.stringify(data) %>;
+            const outputDiv = document.getElementById("output");
+            const start = (page - 1) * 10;
+            const dataSize = "<%= data ? data.length : 0 %>";
+            const data = <%- JSON.stringify(data) %>;
       const end = Math.min(start + 10, dataSize, (page * 10));
 
-      remove()
+            remove()
 
-      for (let i = start; i < end; i++) {
-      const newDiv = document.createElement("div");
-      newDiv.innerHTML = `
-      <div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href='${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
-      <div class="row g-2 card-t">
-      <div class="col-4"><img src="${data[i].img}" class="rounded-start img-fluid" alt="..."/></div>
-      <div class="col-8" align="left">
-      <div class="card-body">
-      <h5 class="card-title">${data[i].title}</h5>
-      <p class="card-text">${data[i].author}</p>
-      <p class="card-text">${data[i].price}원</p>
-      <p class="card-text"><small class="text-muted">${now_store}</small></p>
-      </div>
-      </div>
-      </div>
-      </div>
-      `;
-      outputDiv.appendChild(newDiv);
-      }
+            for (let i = start; i < end; i++) {
+            const newDiv = document.createElement("div");
+            newDiv.innerHTML = `
+            <div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href='${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+            <div class="row g-2 card-t">
+            <div class="col-4"><img src="${data[i].img}" class="rounded-start img-fluid" alt="..."/></div>
+            <div class="col-8" align="left">
+            <div class="card-body">
+            <h5 class="card-title">${data[i].title}</h5>
+            <p class="card-text">${data[i].author}</p>
+            <p class="card-text">${data[i].price}원</p>
+            <p class="card-text"><small class="text-muted">${now_store}</small></p>
+            </div>
+            </div>
+            </div>
+            </div>
+            `;
+            outputDiv.appendChild(newDiv);
+            }
 
-      const buttonsContainer = document.getElementById("buttons");
-      buttonsContainer.innerHTML = "";
+            const buttonsContainer = document.getElementById("buttons");
+            buttonsContainer.innerHTML = "";
+            const numPages = dataSize === 0 ? 1 : Math.ceil(dataSize / 10);
 
-      const numPages = dataSize < 10 ? 1 : Math.ceil(dataSize / 10);
-      const maxButtons = 3;
 
-      let startPage = page - Math.floor(maxButtons / 2);
-      if (startPage < 1) {
-      startPage = 1;
-      }
-      let endPage = startPage + maxButtons - 1;
-      if (endPage > numPages) {
-      endPage = numPages;
-      startPage = endPage - maxButtons + 1;
-      if (startPage < 1) {
-      startPage = 1;
-      }
-      }
+            const maxButtons = 3;
 
-      if (page > 1) {
-      const prevHtml = `
-      <button onclick="displayData(${page - 1})"><</button>
-      `;
-      buttonsContainer.innerHTML += prevHtml;
-      }
+            let startPage = page - Math.floor(maxButtons / 2);
+            if (startPage < 1) {
+            startPage = 1;
+            }
+            let endPage = startPage + maxButtons - 1;
+            if (endPage > numPages) {
+            endPage = numPages;
+            startPage = endPage - maxButtons + 1;
+            if (startPage < 1) {
+            startPage = 1;
+            }
+            }
 
-      for (let i = startPage; i <= endPage; i++) {
-      const start = (i - 1) * 10 + 1;
-      const end = Math.min(start + 10, data.length);
-      const buttonHtml = `
-      <button id="button${i}" onclick="displayData(${i})">${start}</button>
-      `;
-      if (buttonsContainer) {
-      buttonsContainer.innerHTML += buttonHtml;
-      }
-      }
+            if (page > 1) {
+            const prevHtml = `
+            <button onclick="displayData(${page - 1})"><</button>
+            `;
+            buttonsContainer.innerHTML += prevHtml;
+            }
 
-      if (page < numPages) {
-      const nextHtml = `
-      <button onclick="displayData(${page + 1})">></button>
-      `;
-      buttonsContainer.innerHTML += nextHtml;
-      }
-      }
+            for (let i = startPage; i <= endPage; i++) {
+            const start = (i - 1) * 10 + 1;
+            const end = Math.min(start + 10, data.length);
+            const buttonHtml = `
+            <button id="button${i}" onclick="displayData(${i})">${start}</button>
+            `;
+            if (buttonsContainer) {
+            buttonsContainer.innerHTML += buttonHtml;
+            }
+            }
 
-      window.onload = function () {
-      const dataSize = "<%= data ? data.length : 0 %>";
-      const data = <%- JSON.stringify(data) %>;
-      const now_store = "예스24";
+            if (page < numPages) {
+            const nextHtml = `
+            <button onclick="displayData(${page + 1})">></button>
+            `;
+            buttonsContainer.innerHTML += nextHtml;
+            }
+            }
 
-      displayData(1);
-      };
+            window.onload = function () {
+            const dataSize = "<%= data ? data.length : 0 %>";
+            const data = <%- JSON.stringify(data) %>;
+            const now_store = "예스24";
+
+            displayData(1);
+            };
     </script>
     <style>
       /* 도서 사이트 버튼 설정*/
