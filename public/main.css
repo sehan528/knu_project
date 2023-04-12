@@ -1,8 +1,8 @@
 /*배경 설정*/
 .bg-main {
     background-color: aliceblue;
-    background-image: url("https://cdn.pixabay.com/photo/2016/11/21/14/12/books-1845614_1280.jpg");
-    background-size : 100%;
+    /*background-image: url("https://cdn.pixabay.com/photo/2016/11/21/14/12/books-1845614_1280.jpg");
+    background-size : 100%;*/
 }
 /* 메뉴 글자 설정*/
 .menustyle{
@@ -40,3 +40,34 @@
     color: black;
 }
 
+/*애니메이션*/
+.abox{
+    position: relative;
+    animation-name: move, fadeOut;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+}
+
+@keyframes move {
+    from { top: 200px; }
+    to   { top: 0; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+figuercaption{
+    opacity:0;
+    position:absolute;
+    margin-left:-100px;
+    margin-top:-180px;
+    width:200px; height:100px;
+    line-height:100px;
+    font-size:50px;
+    text-align:center;
+    transition: all 1s;
+}
+
+.tbox:hover + figuercaption{ opacity:1; }

@@ -238,13 +238,14 @@
         </div>
       </div>
 
+
       <!-- 1) 기타 책은 10개 이하로 등록되어 10개로 짜를 수 없는 경우가 생겨서 예외처리가 필요했다.-->
       <div id="output">
         <div>
           <% for (var i=0; i < Math.min(data.length, 10); i++) { %>
 
           <div
-            class="border border-white"
+            class="border border-white abox tbox"
             style="max-width: 500px; margin: 10px auto"
             onclick="location.href='http:<%=data[i].link %>'"
             data-spy="scroll"
@@ -270,9 +271,13 @@
                 </div>
               </div>
             </div>
+
           </div>
+          <figuercaption> click </figuercaption>
           <% } %>
         </div>
+
+
       </div>
     </div>
 

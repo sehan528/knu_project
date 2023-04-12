@@ -35,7 +35,7 @@
 
               <div class="card-3d-wrap mx-auto">
                 <div class="card-3d-wrapper">
-                  <div class="card-front">
+                  <div class="card-front" style="background-color: rgb(215, 223, 231); color:black;">
                     <div class="center-wrap">
                       <div class="section text-center">
                         <form action="/login_sign" method="POST">
@@ -45,6 +45,7 @@
                               type="id"
                               name="login_id"
                               class="form-style"
+                              style="background-color: white;"
                               placeholder="ID"
                               autocomplete="off"
                               required
@@ -58,6 +59,7 @@
                               type="password"
                               name="login_password"
                               class="form-style"
+                              style="background-color: white;"
                               placeholder="Password"
                               autocomplete="off"
                               required
@@ -72,7 +74,7 @@
                     </div>
                   </div>
 
-                  <div class="card-back">
+                  <div class="card-back" style="background-color: rgb(215, 223, 231); color:black;">
                     <div class="center-wrap">
                       <div class="section text-center">
                         <form action="/register" method="POST">
@@ -82,6 +84,7 @@
                               type="text"
                               name="regi_name"
                               class="form-style"
+                              style="background-color: white;"
                               placeholder="Name"
                               id="logname"
                               autocomplete="off"
@@ -97,6 +100,7 @@
                               type="id"
                               name="regi_id"
                               class="form-style"
+                              style="background-color: white;"
                               placeholder="ID"
                               autocomplete="off"
                               required
@@ -111,6 +115,7 @@
                               type="password"
                               name="regi_pw"
                               class="form-style"
+                              style="background-color: white;"
                               placeholder="Password"
                               autocomplete="off"
                               required
@@ -131,5 +136,15 @@
         </div>
       </div>
     </div>
+
+    <!-- <script>
+                $.post('/register').then((response) => {
+                    if (response === '이미 등록된 ID!') {
+                        alert('이미 등록된 ID가 있습니다.');
+                        event.preventDefault();
+                    } 
+                });
+    </script> -->
+
   </body>
 </html>
