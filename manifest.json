@@ -15,10 +15,10 @@
     ],
     "offline_page": "/offline.html",
     "start_url": "/",
-    "display": "minimul-ui",
+    "display": "standalone",
     "background_color": "#000000",
     "theme_color": "#000000",
     "id": "DANAWA",
-    "prefer_related_applications": false,
+    "prefer_related_applications": true,
     "splash_screen_duration": "3000"
 }
