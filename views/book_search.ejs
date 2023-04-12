@@ -65,7 +65,7 @@
             for (let i = start; i < end; i++) {
             const newDiv = document.createElement("div");
             newDiv.innerHTML = `
-            <div class="border border-white" style="max-width: 500px; margin: 10px auto" onclick="location.href='${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+            <div class="border border-white abox tbox" style="max-width: 500px; margin: 10px auto" onclick="location.href='${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
             <div class="row g-2 card-t">
             <div class="col-4"><img src="${data[i].img}" class="rounded-start img-fluid" alt="..."/></div>
             <div class="col-8" align="left">
@@ -78,6 +78,7 @@
             </div>
             </div>
             </div>
+            <figuercaption> click </figuercaption>
             `;
             outputDiv.appendChild(newDiv);
             }
@@ -113,7 +114,7 @@
             const start = (i - 1) * 10 + 1;
             const end = Math.min(start + 10, data.length);
             const buttonHtml = `
-            <button id="button${i}" onclick="displayData(${i})">${start}</button>
+            <button id="button${i}" onclick="displayData(${i})">${i}</button>
             `;
             if (buttonsContainer) {
             buttonsContainer.innerHTML += buttonHtml;
