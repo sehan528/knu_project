@@ -39,14 +39,25 @@ app.get('/', (req,res) => {
     res.render('index.ejs', {welcomeid : "TEST"});
 });
 
-// Service worker 파일을 로드
-// app.get('/server-worker.js', (req, res) => {
-//     res.sendFile('/views/server-worker.js');
-// });
+// why? 왜 앱으로 실행할 시 public/view 로 요청하는지 파악해두시오.
+app.get('/public/views/index.ejs', (req,res) => {
+    console.log("App type 으로 실행했음");
+    // res.render('index.ejs', {welcomeid : "TEST"});
+    res.redirect('/');
+});
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+
 
 // offline.html 파일을 로드
 app.get('/offline.html', (req, res) => {
     res.sendFile('/offline.html', { root: __dirname });
+});
+
+app.get('/splash.html', (req, res) => {
+    res.sendFile('/splash.html', { root: __dirname });
 });
 
 // 서비스 워커 등록 요청이 들어올 때 Service-Worker-Allowed 헤더 설정
@@ -54,6 +65,24 @@ app.get('/sw.js', (req, res) => {
     res.setHeader('Service-Worker-Allowed', '/');
     res.sendFile(__dirname + '/sw.js');
 });
+
+// manifest
+app.get('/manifest.json', (req, res) => {
+    res.sendFile(__dirname + '/manifest.json');
+});
+
+// image
+app.get('/project_icon.png', (req, res) => {
+    res.sendFile(__dirname + '/public/image/project_icon.png');
+});
+
+app.get('/splash.png', (req, res) => {
+    res.sendFile(__dirname + '/public/image/splash.png');
+});
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 
 
 
@@ -117,8 +146,8 @@ app.post('/login_sign' , passport.authenticate('local' , {
 }); 
 
 app.get('/user_page' , logincheck, function(req, res) {
-    
-    db.collection('DB_bookUpload').find().toArray(function(err, result) {
+    // console.log(req.user.db_id);
+    db.collection('DB_bookUpload').find({db_uploader: req.user.db_id}).toArray(function(err, result) {
         // console.log(result);
         // console.log(req.user);
         res.render('user_page.ejs' , { posts : result, 사용자 : req.user });  // 찾은걸 ejs file에 넣어주세요.
@@ -126,8 +155,8 @@ app.get('/user_page' , logincheck, function(req, res) {
 })
 
 app.get('/user_messenger' , logincheck, function(req, res) {
-    
-    db.collection('DB_chatList').find().toArray(function(err, result) {
+    // console.log(req.user._id);
+    db.collection('DB_chatList').find({member: ObjectId(req.user._id)}).toArray(function(err, result) {
         // console.log(result);
         // console.log(req.user);
         res.render('user_messenger.ejs' , { posts : result, 사용자 : req.user });  // 찾은걸 ejs file에 넣어주세요.
@@ -200,10 +229,27 @@ passport.deserializeUser(function(get_id, done){
 // DB Tag <- HTML Value
 app.post('/register', function(req, res) {
 
-    db.collection('DB_user').insertOne( { db_id : req.body.regi_id, db_pw : req.body.regi_pw, db_name : req.body.regi_name, admin : false }, function(err, res) {
-        
+    db.collection('DB_user').findOne({ db_id: req.body.regi_id }, function (err, result) {
+        if(err) throw err;
+
+        if(result) {
+            // res.send('이미 등록된 ID!');
+            // res.json({success: false, message: '이미 등록된 ID!'})
+            res.write("<script>alert('ID is already registered. Please check again.')</script>");
+            res.write("<script>window.location=\" /login_sign \"</script>");
+        }
+
+        else {
+            db.collection('DB_user').insertOne( { db_id : req.body.regi_id, db_pw : req.body.regi_pw, db_name : req.body.regi_name, admin : false }, function(err, res) {
+                if(err) throw err;
+
+                console.log('회원가입!');
+            });
+            res.redirect('/');
+        }
+
     });
-    res.redirect('/')
+
 });
 
 // 책등록 & 미들웨어 때문에 하단으로 옮겼습니다.
@@ -414,23 +460,46 @@ const { ObjectId } = require('mongodb');
 
 app.post('/chatList', logincheck, function(req, res) {
 
-    // DB 탐색해서 bookName 이미 있으면 못하게 해야함!!! <- 이후 추가.
 
-
-    // console.log(req.user);
-    // console.log(req.body);
     var CHATINFO = {
         chat_Title : (req.body.bookName),
         member : [ObjectId(req.body.Receiver), req.user._id],
+        uploder: req.body.Uploder,
         // 받은 사람 , 건 사람
         date : new Date()
     }
-    console.log(CHATINFO);
 
-    db.collection('DB_chatList').insertOne(CHATINFO).then((result)=>{
-        res.send('DB_chatList 신규 등록. 대화방이 생성되었음.');
-        // res.render('/user_chat.ejs');
-    })
+    db.collection('DB_chatList').findOne({
+        chat_Title: req.body.bookName,
+        member: [ObjectId(req.body.Receiver), req.user._id],
+    }, function(err, result) {
+        if (err) throw err;
+        
+
+        // if(CHATINFO.member[0] == CHATINFO.member[1]) {
+        //     console.log(CHATINFO.member[0]);
+        //     console.log(CHATINFO.member[1]);
+
+        //     res.send('잘못된 요청 입니다.');
+        // }
+
+        if (result || CHATINFO.member[0].toString() === CHATINFO.member[1].toString()) {
+            // 이미 해당 채팅방이 존재하는 경우
+            res.send('잘못된 접근입니다. 다시 확인해주세요.');
+        } else {
+            // 해당 채팅방이 존재하지 않는 경우
+            db.collection('DB_chatList').insertOne(CHATINFO).then((result)=>{
+                res.send('DB_chatList 신규 등록. 대화방이 생성되었음.');
+            });
+        }
+    });
+    
+    // console.log(CHATINFO);
+
+    // db.collection('DB_chatList').insertOne(CHATINFO).then((result)=>{
+    //     res.send('DB_chatList 신규 등록. 대화방이 생성되었음.');
+    //     // res.render('/user_chat.ejs');
+    // })
 });
 
 

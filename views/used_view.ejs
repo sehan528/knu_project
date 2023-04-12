@@ -21,21 +21,20 @@
     <%- include('nav2.html') %>
 
         <div class="main" style="min-width:300px;" align="center">
-
             <!-- 제목, 작성자, 저자, 출판사, 출판일, 가격 작성 -->
             <div class="col-md-6" align="left">
                 <h5 class="card-title"><%= getData.db_upload_Name %></h5>
                 <!-- <h5 class="card-title"><%= getData.db_uploader_ID %></h5> -->
 
                 <p class="card-text">
-                <div><small class="text-muted">작성자: <%= getData.db_uploader %></small></div>
-                <div><small class="text-muted">저자: <%= getData.db_upload_Author %></small></div>
-                <!-- <div><small class="text-muted">출판사: </small></div> -->
-                <!-- <div><small class="text-muted">출판일: </small></div> -->
-                <p class="card-text">가격: <%= getData.db_upload_Price %> 원</p>
+                    <div><small class="text-muted">작성자: <%= getData.db_uploader %></small></div>
+                    <div><small class="text-muted">저자: <%= getData.db_upload_Author %></small></div>
+                    <!-- <div><small class="text-muted">출판사: </small></div> -->
+                    <!-- <div><small class="text-muted">출판일: </small></div> -->
+                    <p class="card-text">가격: <%= getData.db_upload_Price %> 원</p>
                 </p>
             </div>
-
+            <div><%= getData.db_id %></div>
             <!-- 게시글 내용 작성 -->
             <div class="col-md-6" align="left">
                 <p>
@@ -58,19 +57,18 @@
                 <div>
                     <small class="text-muted">찢어짐: </small>
                     <% if(getData.db_upload_isCutoff !=null) { %> O <% } else {%> X <% } %>
-
+            
                                 <small class="text-muted">변색: </small>
                                 <% if(getData.db_upload_isDiscolor !=null) { %> O <% } else {%> X <% } %>
-
+            
                                             <small class="text-muted">낙서: </small>
                                             <% if(getData.db_upload_isDoodle !=null) { %> O <% } else {%> X <% } %>
-
+            
                                                         <small class="text-muted">제본: </small>
-                                                        <% if(getData.db_upload_isBookbinding !=null) { %> O <% } else
-                                                                {%> X <% } %>
+                                                        <% if(getData.db_upload_isBookbinding !=null) { %> O <% } else {%> X <% } %>
                 </div>
                 </p>
-                <img src="/public/image/<%= getData.db_upload_img %>" class="img-thumbnail" alt="이미지">
+                <img src="/public/image/<%= getData.db_upload_img %>" class="img-thumbnail" alt="이미지" style="width: 225px; height: 225px;">
             </div>
 
 
@@ -82,15 +80,31 @@
             crossorigin="anonymous"></script> -->
 
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
+        </script>
         
         <script>
+
             $('.chat').click(function (e) {
                 var id = e.target.dataset.id;
                 var title = $('h5.card-title').eq(0).text();
-                console.log(id);
+                var writer = '<%= getData.db_uploader %>';
+                console.log(id); // 방주인
                 console.log(title);
-                $.post('/chatList', {Receiver : id, bookName : title}).then(() => {
-                    console.log("전송완료");
+                // $.post('/chatList', { Receiver: id, bookName: title }).then(() => {
+                //     console.log("전송완료");
+                //     window.location.href = '/user_chat';
+                // });
+
+                $.post('/chatList', { Receiver: id, bookName: title, Uploder: writer }).then((response) => {
+                    if (response === '잘못된 접근입니다. 다시 확인해주세요.') {
+                        alert('잘못된 접근입니다. 다시 확인해주세요.');
+                    } else {
+                        console.log("전송완료");
+                        window.location.href = '/user_chat';
+                    }
                 });
             });
         </script>

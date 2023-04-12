@@ -20,7 +20,20 @@
     </style>
 
     <!-- 웹 앱 매니페스트를 읽어 들이기 -->
-    <link rel="manifest" href="/public/manifest.json"/>
+    <link rel="manifest" href="/manifest.json"/>
+    
+    <!-- Splash 이미지 설정 -->
+    <link rel="icon" href="/public/image/project_icon.png" sizes="192x192" type="image/png">
+    <link rel="icon" href="/public/image/splash.png" sizes="512x512" type="image/png">
+
+    <!-- <link rel="apple-touch-startup-image" href="/public/image/project_icon.png" type="image/png"> -->
+    <link rel="apple-touch-startup-image" href="/public/image/splash.png" media="(device-width: 320px)">
+    <link rel="apple-touch-startup-image" href="/public/image/splash.png" media="(device-width: 375px)">
+    <link rel="apple-touch-startup-image" href="/public/image/splash.png" media="(device-width: 414px)">
+    <link rel="apple-touch-startup-image" href="/public/image/splash.png" media="(device-width: 768px)">
+    <link rel="apple-touch-startup-image" href="/public/image/splash.png" media="(device-width: 834px)">
+    <link rel="apple-touch-startup-image" href="/public/image/splash.png" media="(device-width: 1024px)"> 
+
     <!-- 서비스 워커를 등록 -->
     <script>
         if ('serviceWorker' in navigator) {

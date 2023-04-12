@@ -44,7 +44,7 @@
 .abox{
     position: relative;
     animation-name: move, fadeOut;
-    animation-duration: 2s;
+    animation-duration: 1s;
     animation-iteration-count: 1;
 }
 
@@ -69,5 +69,5 @@ figuercaption{
     text-align:center;
     transition: all 1s;
 }
-  
+
 .tbox:hover + figuercaption{ opacity:1; }
