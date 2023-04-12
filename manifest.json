@@ -18,5 +18,7 @@
     "display": "fullscreen",
     "background_color": "#000000",
     "theme_color": "#000000",
-    "id": "DANAWA"
+    "id": "DANAWA",
+    "prefer_related_applications": false,
+    "splash_screen_duration": "3000"
 }
