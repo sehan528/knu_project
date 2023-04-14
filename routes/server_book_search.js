@@ -53,7 +53,7 @@ router.get('/', function(req, res) {
                 title: $(node).find("div > div.item_info > div.info_row.info_name > span.gd_name").text(),
                 author: $(node).find("div > div.item_info > div.info_row.info_pubGrp > span.authPub.info_auth > a:nth-child(1)").text(),
                 // date: $(node).find("div > div.item_info > div.info_row.info_pubGrp > span.authPub.info_date").text(),
-                price: $(node).find("div > div.item_info > div.info_row.info_price > span:nth-child(1) > strong > em").text(),
+                price: $(node).find("div > div.item_info > div.info_row.info_price > span:nth-child(1) > strong > em").text() + "원",
                 img: $(node).find('em > img').attr('data-original'),
                 link : "http://www.yes24.com" + $(node).find("div > div.item_info > div.info_row.info_storeLoca > dl > dd > span > a").attr('href'),
                 marker : store
@@ -89,7 +89,7 @@ router.get('/', function(req, res) {
                 courses.push({
                     title: $node.find("div > div > div > div > div > a > span:nth-child(2)").text(),
                     author: $node.find("div.prod_area.horizontal > div.prod_info_box > div.prod_author_info > div.auto_overflow_wrap.prod_author_group > div.auto_overflow_contents > div > a").text(),
-                    price: $node.find("div.prod_area.horizontal > div.prod_info_box > div.prod_price > span.price > span.val").text(),
+                    price: $node.find("div.prod_area.horizontal > div.prod_info_box > div.prod_price > span.price > span.val").text() + "원",
                     img: $node.find('div.prod_area.horizontal > div.prod_thumb_box.size_lg > a > span > img').attr('src'),
                     link: $node.find("div.prod_btn_wrap > div > a").attr('href'),
                     marker : "kyobo"
