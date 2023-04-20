@@ -48,7 +48,7 @@
 <body class="bg-main">
   <%- include('nav.html') %>
 
-    <div class="main" style="min-width: 300px" align="center">
+    <div class="main" style="min-width: 400px" align="center">
       <div class="wrapper">
         <div class="form-group has-search" style="max-width: 500px">
           <!-- <h3> <%= now_keyword %> </h3> -->
@@ -192,11 +192,11 @@
         for (let i = start; i < end; i++) {
           const newDiv = document.createElement("div");
           newDiv.innerHTML = `
-                    <div class="border border-white abox" style="max-width: 500px; margin: 10px auto" onclick="location.href='${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+                    <div class="border border-white abox" style="max-width: 500px; min-width: 300px; margin: 10px auto" onclick="location.href='${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
                     
-                    <button class="btn btn-outline-secondary card-t" style="width: 500px">
+                    <button class="btn btn-outline-secondary card-t">
                     <div class="row g-2">
-                    <div class="col-4"><img src="${data[i].img}" class="rounded-start img-fluid" alt="..."/></div>
+                    <div class="col-4"><img src="${data[i].img}" style="width: 400px" class="rounded-start img-fluid" alt="..."/></div>
                     <div class="col-8" align="left">
                     <div class="card-body">
                     <h5 class="card-title">${data[i].title}</h5>
