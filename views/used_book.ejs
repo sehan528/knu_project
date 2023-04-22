@@ -33,42 +33,50 @@
     </div> -->
 
     <% for (var i=0; i < posts.length; i ++) { %>
-      <div class="border border-white abox" 
-      style="max-width: 400px; margin: 10px auto;" 
-      onclick="location.href='/used_view/<%= posts[i].db_upload_post %>'" 
-      data-spy="scroll" 
-      data-target="#navbar-example2" 
-      data-offset="0">
-        
-        <ul class="list-group card-t">
-          <li class="list-group-data">
 
-            <div class="row g-2">
-              <div class="col-4">
-                <img src="/public/image/<%= posts[i].db_upload_img %>" class="rounded-start img-fluid" alt="서적 이미지">
-              </div>
+    <div class="border border-white abox" 
+    style="position: relative; max-width: 400px; margin: 10px auto;" 
+    onclick="location.href='/used_view/<%= posts[i].db_upload_post %>'" 
+    data-spy="scroll" 
+    data-target="#navbar-example2" 
+    data-offset="0">
 
-              <div class="col-8" align="left">
-                <div class="card-body" >
-                  <h5 class="card-title">
-                    <%= posts[i].db_upload_Name %>
-                  </h5>
-                  <p class="card-text">
-                    <%= posts[i].db_upload_Author %>
-                  </p>
-                  <p class="card-text">
-                    <%= posts[i].db_upload_Price %> 원
-                  </p>
-                </div>
+    <!-- 판매 완료 조건문 작성 -->
+    <div style="position:absolute; left: 25%; margin: 20px auto;">
+      <img style="width:180px; height:90px;" src="/public/image/soldout_logo.png" alt="판매완료" >
+    </div>
+
+    <button class="btn btn-outline-secondary card-t" style="width: 400px">
+      <ul class="list-group">
+          <div class="row g-2">
+            <div class="col-4">
+              <img src="/public/image/<%= posts[i].db_upload_img %>" class="rounded-start img-fluid" alt="서적 이미지">
+            </div>
+  
+            <div class="col-8" align="left">
+              <div class="card-body" >
+                <h5 class="card-title">
+                  <%= posts[i].db_upload_Name %>
+                </h5>
+                <p class="card-text">
+                  <%= posts[i].db_upload_Author %>
+                </p>
+                <p class="card-text">
+                  <%= posts[i].db_upload_Price %> 원
+                </p>
               </div>
-          </li>
-        </ul>
-      </div>
+            </div>
+            
+      </ul>
+    </button>
+    </div>
+
+
     <% } %>
 
     <!-- --------------------------------------------------------- -->
     <div class="d-grid gap-2 d-md-flex justify-content-md-center abox">
-      <button class="btn btn-outline-light card-t" type="button" >
+      <button class="btn btn-outline-secondary card-t" type="button" >
         <a class="nav-link " href="/used_write">글 작성</a>
       </button>
       <!-- <button class="btn btn-outline-light" type="button">
