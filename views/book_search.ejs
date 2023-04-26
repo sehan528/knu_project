@@ -24,50 +24,56 @@
     <link rel="stylesheet" href="/public/main.css" />
 
     <script>
-      let store = "<%= now_store %>" || "yes24";
-      const visibleButtons = 3;
+        let store = "<%= now_store %>" || "yes24";
+        const visibleButtons = 3;
+        let Book_data;
 
-      window.onload = function () {
-        const dataSize = "<%= data ? data.length : 0 %>";
-        const data = JSON.parse("<%- JSON.stringify(data) %>");
-        displayData(1);
-      };
-      function changeStore(value) {
-        store = value;
-        console.log(store);
-      }
-
-      function search(event) {
-        if (event.keyCode === 13) {
+        window.onload = function () {
+          const dataSize = "<%= data ? data.length : 0 %>";
+          try {
+            Book_data = JSON.parse('<%- JSON.stringify(data) %>');
+          } catch (error) {
+            console.error(error);
+            Book_data = []; // 오류가 발생하면 빈 배열로 설정
+          }
+          displayData(1);
+        };
+        function changeStore(value) {
+          store = value;
           console.log(store);
-          const form = document.querySelector(".form");
-          const inputValue = form.querySelector('input[name="value"]').value;
-          const url = `/book_search?value=${inputValue}&store=${store}`;
-          window.location.href = url;
         }
-      }
 
-      function remove() {
-        const outputDiv = document.getElementById("output");
-        while (outputDiv.firstChild) {
-          outputDiv.removeChild(outputDiv.firstChild);
+        function search(event) {
+          if (event.keyCode === 13) {
+            console.log(store);
+            const form = document.querySelector(".form");
+            const inputValue = form.querySelector('input[name="value"]').value;
+            const url = `/book_search?value=${inputValue}&store=${store}`;
+            window.location.href = url;
+          }
         }
-      }
 
-      function displayData(page) {
-        const outputDiv = document.getElementById("output");
-        const start = (page - 1) * 10;
-        const dataSize = "<%= data ? data.length : 0 %>";
-        const dataString = JSON.stringify(data);
-        const data = JSON.parse(dataString);
+        function remove() {
+          const outputDiv = document.getElementById("output");
+          while (outputDiv.firstChild) {
+            outputDiv.removeChild(outputDiv.firstChild);
+          }
+        }
 
-        const end = Math.min(start + 10, dataSize, page * 10);
+        function displayData(page) {
+          const outputDiv = document.getElementById("output");
+          const start = (page - 1) * 10;
+          const dataSize = "<%= data ? data.length : 0 %>";
 
-        remove();
+          //EJS 구문이 JavaScript 구문으로 간주되어 구문 강조 표시가 적용되지 않기 때문
+          const data = <%- JSON.stringify(data) %>;
+          const end = Math.min(start + 10, dataSize, (page * 10));
 
-        for (let i = start; i < end; i++) {
-          const newDiv = document.createElement("div");
-          newDiv.innerHTML = `
+          remove();
+
+          for (let i = start; i < end; i++) {
+            const newDiv = document.createElement("div");
+            newDiv.innerHTML = `
                     <div class="border border-white abox" style="max-width: 500px; min-width: 300px; margin: 10px auto" onclick="location.href='${data[i].link}'" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
 
                       <button class="btn btn-outline-secondary card-t">
@@ -86,7 +92,7 @@
                       </div>
 
                       `;
-          outputDiv.appendChild(newDiv);
+            outputDiv.appendChild(newDiv);
         }
 
         const buttonsContainer = document.getElementById("buttons");
@@ -94,7 +100,7 @@
         const numPages = dataSize === 0 ? 1 : Math.ceil(dataSize / 10);
         let startButton, endButton;
 
-        // 현재 페이지에서 보일 버튼 범위 계산
+            // 현재 페이지에서 보일 버튼 범위 계산
         if (page <= Math.ceil(visibleButtons / 2)) {
           startButton = 1;
           endButton = Math.min(numPages, visibleButtons);
@@ -108,16 +114,12 @@
         let buttonHtml = "";
 
         // '<<' 버튼 추가
-        buttonHtml += `<button ${
-          page === 1 ? "disabled" : ""
-        } onclick="displayData(1)">&lt;&lt;</button>`;
+        buttonHtml += `<button ${page === 1 ? "disabled" : ""} onclick="displayData(1)">&lt;&lt;</button>`;
 
-        // '<' 버튼 추가
-        buttonHtml += `<button ${
-          page === 1 ? "disabled" : ""
-        } onclick="displayData(${page - 1})">&lt;</button>`;
+      // '<' 버튼 추가
+        buttonHtml += `<button ${page === 1 ? "disabled" : ""} onclick="displayData(${page - 1})">&lt;</button>`;
 
-        // 페이지 버튼 추가
+      // 페이지 버튼 추가
         for (let i = startButton; i <= endButton; i++) {
           buttonHtml += `
             <button id="button${i}" onclick="displayData(${i})" ${
@@ -125,11 +127,11 @@
           }>${i}</button>
           `;
         }
-        // '>' 버튼 추가
+      // '>' 버튼 추가
         buttonHtml += `<button ${
           page === numPages ? "disabled" : ""
         } onclick="displayData(${page + 1})">&gt;</button>`;
-        buttonHtml += `<button ${
+                buttonHtml += `<button ${
           page === numPages ? "disabled" : ""
         } onclick="displayData(${numPages})">&gt;&gt;</button>`;
 
