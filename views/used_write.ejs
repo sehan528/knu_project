@@ -1,98 +1,171 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
 
     <title>중고서적 작성</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    
-    <link rel="stylesheet" href="/public/main.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="/public/main.css" />
     <style>
       .main {
-          width: 60%;
-          margin: 20px auto;
+        width: 60%;
+        margin: 20px auto;
       }
     </style>
+  </head>
 
-</head>
+  <!-- book_name book_author book_price isCutoff isDiscolor isDoodle isBookbinding img comment -->
 
-<!-- book_name book_author book_price isCutoff isDiscolor isDoodle isBookbinding img comment -->
-
-<body class="bg-main">
-
+  <body class="bg-main">
     <%- include('nav2.html') %>
 
-  <form class="row g-3 main" method="POST" action="/used_write" enctype="multipart/form-data">
-    
-    <div class="col-md-6">
-      <label for="book-name" class="form-label">책 제목</label>
-      <input type="text" class="form-control card-t" id="book-name" name="book_name">
-    </div>
+    <form
+      class="row g-3 main"
+      method="POST"
+      action="/used_write"
+      enctype="multipart/form-data"
+    >
+      <div class="col-md-6">
+        <label for="book-name" class="form-label">책 제목</label>
+        <input
+          type="text"
+          class="form-control card-t"
+          id="book-name"
+          name="book_name"
+          required
+          pattern="[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣\s]{1,13}"
+          oninvalid="this.setCustomValidity('영문 대/소문자, 숫자, 한글 1~13글자 이내로 입력하세요.')"
+          onchange="this.setCustomValidity('')"
+        />
+      </div>
 
-    <div class="col-md-6">
-      <label for="book-author" class="form-label">저자</label>
-      <input type="text" class="form-control card-t" id="book-author" name="book_author">
-    </div>
+      <div class="col-md-6">
+        <label for="book-author" class="form-label">저자</label>
+        <input
+          type="text"
+          class="form-control card-t"
+          id="book-name"
+          name="book_name"
+          required
+          pattern="[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣\s]{1,8}"
+          oninvalid="this.setCustomValidity('영문 대/소문자, 숫자, 한글 1~8글자 이내로 입력하세요.')"
+          onchange="this.setCustomValidity('')"
+        />
+      </div>
 
-    <div class="col-12">
-      <label for="price" class="form-label">희망 가격</label>
-      <input type="text" class="form-control card-t" id="price" name="book_price">
-    </div>
+      <div class="col-12">
+        <label for="price" class="form-label">희망 가격</label>
+        <input
+          type="text"
+          class="form-control card-t"
+          id="book-name"
+          name="book_name"
+          required
+          pattern="[0-7]{1,8}"
+          oninvalid="this.setCustomValidity('0부터 7사이의 숫자를 1~8글자로 입력하세요.')"
+          onchange="this.setCustomValidity('')"
+        />
+      </div>
 
-    <div class="row mb-3">
-
+      <div class="row mb-3">
         <div class="col-md-6">
-            <input class="form-check-input" type="checkbox" id="gridCheck1" name="isCutoff">
-            <label class="form-check-label" for="gridCheck1">찢어짐</label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="gridCheck1"
+            name="isCutoff"
+          />
+          <label class="form-check-label" for="gridCheck1">찢어짐</label>
         </div>
 
         <div class="col-md-6">
-            <input class="form-check-input" type="checkbox" id="gridCheck2" name="isDiscolor">
-            <label class="form-check-label" for="gridCheck2">변색</label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="gridCheck2"
+            name="isDiscolor"
+          />
+          <label class="form-check-label" for="gridCheck2">변색</label>
         </div>
 
         <div class="col-md-6">
-            <input class="form-check-input" type="checkbox" id="gridCheck3" name="isDoodle">
-            <label class="form-check-label" for="gridCheck3">낙서</label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="gridCheck3"
+            name="isDoodle"
+          />
+          <label class="form-check-label" for="gridCheck3">낙서</label>
         </div>
 
         <div class="col-md-6">
-            <input class="form-check-input" type="checkbox" id="gridCheck4" name="isBookbinding">
-            <label class="form-check-label" for="gridCheck4">제본</label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="gridCheck4"
+            name="isBookbinding"
+          />
+          <label class="form-check-label" for="gridCheck4">제본</label>
         </div>
-        
-    </div>
+      </div>
 
-    <div class="mb-3">
-        <label for="formFile" class="form-label">이미지</label>
-        <input class="form-control card-t" type="file" id="formFile" name="img">
+      <div class="mb-3">
+        <input
+          class="form-control card-t"
+          type="file"
+          id="formFile"
+          name="img"
+          required
+          oninvalid="this.setCustomValidity('이미지 파일을 선택해주세요.')"
+          onchange="this.setCustomValidity('')"
+        />
         <!-- <img id="preview" src="#" alt="미리보기" style="max-width: 225px; max-height: 225px;"> -->
-    </div>
+      </div>
 
-    <div class="mb-3">
+      <div class="mb-3">
         <label for="Textarea1" class="form-label">게시글 작성</label>
-        <textarea class="form-control card-t" style="height: 200px;" id="Textarea" rows="3" name="comment"> </textarea>
-    </div>
-    
-    <div class="col-12 text-center">
-      <button type="submit" class="btn btn-outline-light card-t" >
-        <!-- <a class="nav-link">업로드</a> -->
-        업로드
-      </button>
-    </div>
+        <textarea
+          class="form-control card-t"
+          style="height: 200px"
+          id="Textarea"
+          rows="3"
+          name="comment"
+          required
+          pattern="^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣!@#$%^&*(),.?:{}|<>_+=\-\[\]\\';\/\s]{10,200}$"
+          oninvalid="this.setCustomValidity('10글자 이상 설명을 추가해주세요!')"
+          onchange="this.setCustomValidity('')"
+        ></textarea>
+      </div>
 
-  </form>
+      <div class="col-12 text-center">
+        <button type="submit" class="btn btn-outline-light card-t">
+          <!-- <a class="nav-link">업로드</a> -->
+          업로드
+        </button>
+      </div>
+    </form>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" 
-      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
-    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
 
     <script>
-      window.onload = function() {
+      window.onload = function () {
         document.querySelector("form").reset();
-      }
+      };
     </script>
-</body>
+  </body>
 </html>

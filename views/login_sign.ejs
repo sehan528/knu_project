@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
 
     <title>로그인</title>
     <link
@@ -36,7 +39,10 @@
 
               <div class="card-3d-wrap mx-auto">
                 <div class="card-3d-wrapper">
-                  <div class="card-front" style="background-color: rgb(215, 223, 231); color:black;">
+                  <div
+                    class="card-front"
+                    style="background-color: rgb(215, 223, 231); color: black"
+                  >
                     <div class="center-wrap">
                       <div class="section text-center">
                         <form action="/login_sign" method="POST">
@@ -46,7 +52,7 @@
                               type="id"
                               name="login_id"
                               class="form-style"
-                              style="background-color: white;"
+                              style="background-color: white"
                               placeholder="ID"
                               autocomplete="off"
                               required
@@ -60,7 +66,7 @@
                               type="password"
                               name="login_password"
                               class="form-style"
-                              style="background-color: white;"
+                              style="background-color: white"
                               placeholder="Password"
                               autocomplete="off"
                               required
@@ -75,7 +81,10 @@
                     </div>
                   </div>
 
-                  <div class="card-back" style="background-color: rgb(215, 223, 231); color:black;">
+                  <div
+                    class="card-back"
+                    style="background-color: rgb(215, 223, 231); color: black"
+                  >
                     <div class="center-wrap">
                       <div class="section text-center">
                         <form action="/register" method="POST">
@@ -85,7 +94,7 @@
                               type="text"
                               name="regi_name"
                               class="form-style"
-                              style="background-color: white;"
+                              style="background-color: white"
                               placeholder="Name"
                               id="logname"
                               autocomplete="off"
@@ -101,12 +110,12 @@
                               type="id"
                               name="regi_id"
                               class="form-style"
-                              style="background-color: white;"
+                              style="background-color: white"
                               placeholder="ID"
                               autocomplete="off"
                               required
-                              pattern="^[a-zA-Z0-9]+$"
-                              oninvalid="this.setCustomValidity('ID는 영문자와 숫자만 입력 가능합니다.')"
+                              pattern="^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$"
+                              oninvalid="this.setCustomValidity('ID는 영문자와 숫자와 한글만 입력 가능합니다.')"
                               oninput="setCustomValidity('')"
                             />
                           </div>
@@ -116,7 +125,7 @@
                               type="password"
                               name="regi_pw"
                               class="form-style"
-                              style="background-color: white;"
+                              style="background-color: white"
                               placeholder="Password"
                               autocomplete="off"
                               required
@@ -147,6 +156,5 @@
         }
       });
     </script> -->
-
   </body>
 </html>
