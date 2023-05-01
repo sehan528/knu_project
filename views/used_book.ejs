@@ -43,16 +43,16 @@
 
     <!-- 판매 완료 조건문 작성 -->
     <% if(posts[i].db_is_Sell != null) { %>
+
     <div style="position:absolute; left: 25%; margin: 20px auto;">
       <img style="width:180px; height:90px;" src="/public/image/soldout999logo9.png" alt="판매완료" >
     </div>
-    <% } %>
 
     <button class="btn btn-outline-secondary card-t" style="width: 400px">
       <ul class="list-group">
           <div class="row g-2">
             <div class="col-4">
-              <img src="/public/image/<%= posts[i].db_upload_img %>" class="rounded-start img-fluid" alt="서적 이미지">
+              <img src="/public/image/<%= posts[i].db_upload_img %>" style="width: 400px; min-height: 110px;" class="rounded-start img-fluid" alt="서적 이미지">
             </div>
   
             <div class="col-8" align="left">
