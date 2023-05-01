@@ -42,9 +42,11 @@
     data-offset="0">
 
     <!-- 판매 완료 조건문 작성 -->
+    <% if(posts[i].db_is_Sell != null) { %>
     <div style="position:absolute; left: 25%; margin: 20px auto;">
       <img style="width:180px; height:90px;" src="/public/image/soldout999logo9.png" alt="판매완료" >
     </div>
+    <% } %>
 
     <button class="btn btn-outline-secondary card-t" style="width: 400px">
       <ul class="list-group">
