@@ -71,3 +71,19 @@ figuercaption{
 }
 
 .tbox:hover + figuercaption{ opacity:1; }
+
+
+/*이미지 애니메이션*/
+.il img {
+    transition: all 0.2s linear;
+}
+.il:hover img {
+    transform: scale(1.6);
+}
+img {
+    max-width: 100%;
+}
+.il {
+    text-align: center;
+    margin: 0px auto;
+}

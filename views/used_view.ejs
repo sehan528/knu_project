@@ -48,7 +48,7 @@
                 <% if(getData.db_is_Sell != null) { %>
                 <img style="position:absolute; width:200px; height:100px;" src="/public/image/soldout_logo.png" alt="판매완료" >
                 <% } else {%>
-                <button class="btn card-t" type="button">
+                <button class="btn btn-outline-secondary card-t" type="button">
                     <!-- 추후에 기능 추가 -->
                     <a class="nav-link chat" data-id="<%= getData.db_uploader_ID %>">판매자에게 메시지 보내기</a>
 
@@ -75,7 +75,9 @@
                                                         <% if(getData.db_upload_isBookbinding !=null) { %> O <% } else {%> X <% } %>
                 </div>
                 </p>
-                <img src="/public/image/<%= getData.db_upload_img %>" class="img-thumbnail" alt="이미지" style="width: 225px; height: 225px;">
+                <div class="il">
+                    <img src="/public/image/<%= getData.db_upload_img %>" class="img-fluid" alt="이미지" style="width: 230px; height: 230px;">
+                </div>
             </div>
 
 
