@@ -24,6 +24,7 @@ const axios = require('axios');
 
 
 var db;
+/*
 MongoClient.connect(
     process.env.DB_URL, 
     function(에러,client) {
@@ -32,6 +33,19 @@ MongoClient.connect(
     db = client.db('KNUDB');
 
     app.listen(process.env.PORT, function() {
+        console.log('listening on 3000');
+    });
+    
+})*/
+
+MongoClient.connect(
+    "mongodb+srv://admin:1q2w3e4r@cluster0.dh8gyjd.mongodb.net/test", 
+    function(에러,client) {
+    // 에러 = 에러가 발생했을 시 해당 URL을 출력 해줄 것.
+    if(에러) {return console.log(에러)};
+    db = client.db('KNUDB');
+
+    app.listen(3000, function() {
         console.log('listening on 3000');
     });
     
