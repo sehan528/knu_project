@@ -38,6 +38,9 @@
             <!-- 게시글 내용 작성 -->
             <div class="col-md-6" align="left">
                 <p>
+                <% if(getData.db_is_Sell != null) { %>
+                    <img style="position:absolute; width:300px; height:200px;" src="/public/image/soldout_logo.png" alt="판매완료" >
+                <% } %>
                 <h5 class="card-title">게시글 </h5>
                 <div>
                     <%= getData.db_upload_Comment %>
@@ -45,9 +48,7 @@
                 </p>
 
                 <!-- 판매 완료 조건문 작성 -->
-                <% if(getData.db_is_Sell != null) { %>
-                <img style="position:absolute; width:200px; height:100px;" src="/public/image/soldout_logo.png" alt="판매완료" >
-                <% } else {%>
+                <% if(getData.db_is_Sell == null) { %>
                 <button class="btn btn-outline-secondary card-t" type="button">
                     <!-- 추후에 기능 추가 -->
                     <a class="nav-link chat" data-id="<%= getData.db_uploader_ID %>">판매자에게 메시지 보내기</a>
@@ -75,6 +76,7 @@
                                                         <% if(getData.db_upload_isBookbinding !=null) { %> O <% } else {%> X <% } %>
                 </div>
                 </p>
+                
                 <div class="il">
                     <img src="/public/image/<%= getData.db_upload_img %>" class="img-fluid" alt="이미지" style="width: 230px; height: 230px;">
                 </div>
