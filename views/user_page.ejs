@@ -36,30 +36,32 @@
                 <div class="border border-white" style="max-width: 400px; margin: 10px auto;"
                     data-spy="scroll"
                     data-target="#navbar-example2" data-offset="0">
-                    <ul class="list-group">
-                        <li class="list-group-data">
+                    <ul class="list-group card-t" style="background-color: #d3d3d3">
+                        <div onclick="location.href='/used_view/<%= posts[i].db_upload_post %>'">
                             <div class="row g-2">
                                 <div class="col-4">
-                                    <img src="/public/image/<%= posts[i].db_upload_img %>" class="rounded-start img-fluid"
+                                    <img src="/public/image/<%= posts[i].db_upload_img %>" style="width: 400px; min-height: 100px;" class="rounded-start img-fluid"
                                         alt="서적 이미지">
                                 </div>
 
                                 <div class="col-8" align="left">
-                                    <div class="card-body bg-dark" style="color: aliceblue">
-                                        <div class="mini-container" onclick="location.href='/used_view/<%= posts[i].db_upload_post %>'">
+                                    <div class="card-body" >
+                                        <div class="mini-container">
                                             <h5 class="card-title">
                                                 <%= posts[i].db_upload_Name %>
                                             </h5>
                                             <p class="card-text">
                                                 <%= posts[i].db_upload_Author %>
                                             </p>    
+                                        
+        
+                                            <a class="btn btn-outline-secondary" style="color: black;" href="/edit/<%= posts[i].db_upload_post %>" role="button">수정</a>
+                                            <a class="btn btn-outline-secondary delete"  style="color: black;" data-id="<%= posts[i].db_upload_post %>">삭제</a>
                                         </div>
-                                        <a class="btn btn-dark" href="/edit/<%= posts[i].db_upload_post %>" role="button">수정</a>
-                                        <a class="btn btn-dark delete" data-id="<%= posts[i].db_upload_post %>">삭제</a>
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </div>
                     </ul>
                 </div>
                 <% } %>
