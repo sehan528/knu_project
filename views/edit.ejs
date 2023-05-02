@@ -23,19 +23,19 @@
 
         <div class="col-md-6">
             <label for="book-name" class="form-label">책 제목</label>
-            <input value="<%= getData.db_upload_Name %>" type="text" class="form-control" id="book-name"
+            <input value="<%= getData.db_upload_Name %>" type="text" class="form-control card-t" id="book-name"
                 name="book_name">
         </div>
 
         <div class="col-md-6">
             <label for="book-author" class="form-label">저자</label>
-            <input value="<%= getData.db_upload_Author %>" type="text" class="form-control" id="book-author"
+            <input value="<%= getData.db_upload_Author %>" type="text" class="form-control card-t" id="book-author"
                 name="book_author">
         </div>
 
         <div class="col-12">
             <label for="price" class="form-label">희망 가격</label>
-            <input value="<%= getData.db_upload_Price %>" type="text" class="form-control" id="price" name="book_price">
+            <input value="<%= getData.db_upload_Price %>" type="text" class="form-control card-t" id="price" name="book_price">
         </div>
 
         <div class="row mb-3">
@@ -72,7 +72,7 @@
 
         <div class="mb-3">
             <label for="formFile" class="form-label">이미지</label>
-            <input class="form-control" type="file" id="formFile" name="img"
+            <input class="form-control card-t" type="file" id="formFile" name="img"
                 value="<%=getData.db_upload_img %>">
         </div>
 
@@ -94,13 +94,13 @@
 
         <div class="mb-3">
             <label for="Textarea1" class="form-label">게시글 작성</label>
-            <textarea id="Textarea" type="text" class="form-control" style="height: 200px;" rows="3"
+            <textarea id="Textarea" type="text" class="form-control card-t" style="height: 200px;" rows="3"
                 name="comment"><%= getData.db_upload_Comment %></textarea>
         </div>
 
 
         <div class="col-12 text-center">
-            <button type="submit" class="btn btn-outline-light">업로드</button>
+            <button type="submit" class="btn btn-outline-secondary card-t">업로드</button>
         </div>
 
     </form>
