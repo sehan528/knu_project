@@ -6,13 +6,16 @@ app.use('/public', express.static('public'));
 
 const bodyParser= require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json());
 
 const MongoClient = require('mongodb').MongoClient;
 
 const methodOverride = require('method-override')
 app.use(methodOverride('_method'))
 
+require('dotenv').config()
 
+const axios = require('axios');
 
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -22,13 +25,13 @@ app.use(methodOverride('_method'))
 
 var db;
 MongoClient.connect(
-    "mongodb+srv://admin:1q2w3e4r@cluster0.dh8gyjd.mongodb.net/test", 
+    process.env.DB_URL, 
     function(에러,client) {
     // 에러 = 에러가 발생했을 시 해당 URL을 출력 해줄 것.
     if(에러) {return console.log(에러)};
     db = client.db('KNUDB');
 
-    app.listen(3000, function() {
+    app.listen(process.env.PORT, function() {
         console.log('listening on 3000');
     });
     
@@ -128,22 +131,125 @@ app.get('/login_sign' , (req, res) => {
     res.render('login_sign.ejs');
 }); 
 
-// passport.authenticate : 응답해주기 전 local방식으로 ID,PW 인증. / 인증 실패시 /fail로 이동
-app.post('/login_sign' , passport.authenticate('local' , {
-    failureRedirect : 
+app.post('/kakao_login' , (req,res) => {
+    console.log(req.body.kakao_code);
+    // encodeURIComponent
+    // axios.post("https://kauth.kakao.com/oauth/token", 
+    // "grant_type=authorization_code" +
+    // "&client_id=" + `${process.env.KAKAO_REST_API_KEY}` +
+    // "&redirect_uri=" + (`${process.env.REDIRECT_URL}`) +
+    // "&code=" + `${req.body.kakao_code}`, {
+    //     headers: {
+    //         "Content-Type": "application/x-www-form-urlencoded"
+    //     }
+    // })
+    // // 성공적으로 access_token을 받았을 때의 동작
+    // .then((response) => {
+    //     console.log(response);
+    // })
+    // // access_token 요청이 실패했을 때의 동작
+    // .catch((error) => {
+    //     console.log(error);
+    // });
 
-    '/login_sign'     
-}), function(req, res) {
+    // --------------------------------------------------------------------------------------------------
+
+    db.collection('DB_user').findOne({ db_id: req.body.kakao_email }, function (err, result) {
+        if(err) throw err;
+        
+        // 이미 가입되어 있어 login 으로 post를 보냅니다. 
+        if(result) {
+            axios.post(`${process.env.POST_URL}login_sign`, {
+                login_id: req.body.kakao_email,
+                login_password: req.body.kakao_id
+            }
+            , {
+                headers: {
+                    Cookie: `cookieName=${req.session.cookie}`,
+                    Authorization: `Bearer ${req.body.token}`
+                }
+            })
+                .then((req) => {
+                    console.log("카카오 로그인")
+                    console.log(req.config.data);
+                })
+                .catch((err) => {
+                    console.log("카카오 로그인 에러")
+                    console.log(err);
+                });
+
+
+
+            // console.log("카카오 로그인 시도")
+            // console.log("나와라세션")
+            // console.log(req.session);
+
+            // console.log(req.session.cookie);
+
+            // axios.post(`${process.env.POST_URL}login_sign`, {
+            //     login_id: req.body.kakao_email,
+            //     login_password: req.body.kakao_id
+            // }, {
+            //     headers: {
+            //         Cookie: `cookieName=${req.session.cookie}`,
+            //         Authorization: `Bearer ${req.body.token}`
+            //     }
+            // })
+            //     .then((req) => {
+            //         console.log("카카오 로그인")
+            //         console.log(req.config.data);
+            //     })
+            //     .catch((err) => {
+            //         console.log("카카오 로그인 에러")
+            //         console.log(err);
+            //     });
+
+        }
+        
+        // 신규 회원이기에 register로 post를 보냅니다.
+        else {
+            console.log("카카오 신규등록 시도")
+            axios.post(`${process.env.POST_URL}register`, {
+                regi_id: req.body.kakao_email,
+                regi_pw: req.body.kakao_id,
+                regi_name: req.body.kakao_nickname 
+            })
+                .then((req) => {
+                    console.log("카카오 신규회원 가입")
+                    console.log(req.config.data);
+
+                })
+                .catch((err) => {
+                    console.log("카카오 신규회원 가입 에러")
+                    console.log(err);
+                });
+        }
+
+    });
+});
+
+// passport.authenticate : 응답해주기 전 local방식으로 ID,PW 인증. / 인증 실패시 /fail로 이동
+app.post('/login_sign', passport.authenticate('local', {
+    failureRedirect:
+        '/login_sign'
+}), function (req, res, err) {
+    if(err) {
+        // console.log("패스포트 에러");
+        console.log(err);
+    }
     // 로그인 성공
     // console.log(res);
-    console.log(req.user.db_id);
+    console.log("check user information in post.login_sign");
+    console.log(req.user);
     // var enterID = req.user.db_id;
 
     // res.write("<script>alert(enterID + 'LOGIN!')</script>");
     // res.write("<script>window.location=\" / \"</script>");
-    res.render('index.ejs', {welcomeid : req.user.db_id});
+    res.render('index.ejs', { welcomeid: req.user.db_id });
     //res.redirect('/')
 }); 
+
+
 
 app.get('/user_page' , logincheck, function(req, res) {
     // console.log(req.user.db_id);
@@ -167,8 +273,10 @@ app.get('/user_messenger' , logincheck, function(req, res) {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-// 미들웨어 
+// 미들웨어 -> 이후 생성된 토큰 검사만 함.
 function logincheck (req, res, next) {
+    // console.log("미들웨어 체크");
+    // console.log(req);
     if(req.user) {
         // console.log(요청.user);
         next()
@@ -191,12 +299,13 @@ passport.use(new LocalStrategy({
 
     // done (서버에러 , 성공시 사용자 DB데이터, 에러메세지)    
     }, function (get_id, get_pw, done) {
-    // console.log(get_id, get_password);
+    console.log(get_id, get_pw);
     db.collection('DB_user').findOne({ db_id: get_id }, function (err, res) {
         if (err) return done(err)
 
         if (!res) return done(null, false, { message: '존재하지않는 아이디 입니다.'})
         if (get_pw == res.db_pw) {
+            console.log(`로그인 성공 & 결과를 반환 in passport.use()`);
             console.log(res);
             return done(null, res)
         } else {
@@ -208,12 +317,17 @@ passport.use(new LocalStrategy({
 // user.id를 바탕으로 세션데이터 생성 -> 쿠키로 생성 -> 브라우저 전송.
 passport.serializeUser(function(user, done){
     // must DB check
+    console.log("in passport.serializeUser");
+    console.log(user);
+
     done(null, user.db_id);
     // console.log(user.id);
 });
 
 // 로그인한 유저의 세션아이디를 바탕으로 개인정보를 DB에서 찾는 역할
 passport.deserializeUser(function(get_id, done){
+    console.log("in passport.deserializaUser")
+    console.log(get_id);
     db.collection('DB_user').findOne({ db_id : get_id}, function(err,res){
         done(null, res);
         // console.log(res);
@@ -228,7 +342,7 @@ passport.deserializeUser(function(get_id, done){
 
 // DB Tag <- HTML Value
 app.post('/register', function(req, res) {
-
+    console.log(req.body);
     db.collection('DB_user').findOne({ db_id: req.body.regi_id }, function (err, result) {
         if(err) throw err;
 

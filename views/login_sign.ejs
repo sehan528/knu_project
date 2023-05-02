@@ -70,6 +70,13 @@
                             />
                           </div>
                           <button type="submit" class="btn mt-4">확인</button>
+                          <a id="kakao-login-btn" href="javascript:loginWithKakao();">
+                            <img class="mt-4" src="/public/image/kakao_login_medium_narrow.png" alt="카카오 로그인 버튼" />
+                          </a>
+                          <p id="token-result" onclick="requestUserInfo()"> kakao_token_test </p>
+
+
+
                         </form>
                       </div>
                     </div>
@@ -125,6 +132,7 @@
                               oninput="setCustomValidity('')"
                             />
                           </div>
+
                           <button type="submit" class="btn mt-4">확인</button>
                         </form>
                       </div>
@@ -147,6 +155,103 @@
         }
       });
     </script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js"
+      integrity="sha384-dpu02ieKC6NUeKFoGMOKz6102CLEWi9+5RQjWSV0ikYSFFd8M3Wp2reIcquJOemx" crossorigin="anonymous">
+    </script>
+    
+    <script type="text/javascript">
+      // var test = "aaaaaa"트
+      // console.log(`${test}`); // 백틱 테스트
+
+      Kakao.init("<%=process.env.KAKAO_JS_KEY%>"); // 사용하려는 앱의 JavaScript 키 입력
+      console.log(Kakao.isInitialized()); // SDK 초기화 여부를 판단합니다.
+  
+      function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+
+      const kakaoCode = getQueryParam('code');
+
+    </script>
+
+    <script type="text/javascript">
+
+      function loginWithKakao() {
+        Kakao.Auth.authorize ({
+          redirectUri: encodeURI(`<%=process.env.REDIRECT_URL%>`),
+          scope: 'profile_nickname, profile_image, account_email',
+        });
+      }
+
+      $.ajax({
+          type : "POST"
+          , url : 'https://kauth.kakao.com/oauth/token'
+          , data : {
+              grant_type : 'authorization_code',
+              client_id : '<%=process.env.KAKAO_JS_KEY%>',
+              redirect_uri : '<%=process.env.REDIRECT_URL%>',
+              code : kakaoCode
+          }
+          , contentType:'application/x-www-form-urlencoded;charset=utf-8'
+          , dataType: null
+          , success : function(response) {
+              Kakao.Auth.setAccessToken(response.access_token);
+              // document.querySelector('button.api-btn').style.visibility = 'visible';
+              // alert(JSON.stringify(response));
+              Kakao.API.request({
+                url: '/v2/user/me',
+              })
+                .then(function(res) {
+                  // const kakao_email = res.kakao_account.email;;
+                  // const kakao_id  = res.id;
+                  // const kakao_nickname = res.properties.nickname;
+
+                  $.ajax({
+                    type: "POST",
+                    url : "/kakao_login",
+                    data : {
+                      kakao_email : res.kakao_account.email,
+                      kakao_id : res.id,
+                      kakao_nickname : res.properties.nickname,
+                      kakao_code : kakaoCode
+                    }
+                  })
+                  // console.log(kakao_email, kakao_id, kakao_nickname);
+                  // console.log(JSON.stringify(res));
+                  // alert(JSON.stringify(res));
+
+                })
+                .catch(function(err) {
+                  alert(
+                    'failed to request user information: ' + JSON.stringify(err)
+                  );
+                });
+
+          }
+          ,error : function(jqXHR, error) {
+          
+          }
+      });
+
+      function requestUserInfo() {
+        Kakao.API.request({
+          url: '/v2/user/me',
+        })
+          .then(function(res) {
+            alert(JSON.stringify(res));
+          })
+          .catch(function(err) {
+            alert(
+              'failed to request user information: ' + JSON.stringify(err)
+            );
+          });
+      }
+
+    </script>
 
   </body>
 </html>
