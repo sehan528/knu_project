@@ -73,7 +73,7 @@
                           <a id="kakao-login-btn" href="javascript:loginWithKakao();">
                             <img class="mt-4" src="/public/image/kakao_login_medium_narrow.png" alt="카카오 로그인 버튼" />
                           </a>
-                          <p id="token-result" onclick="requestUserInfo()"> kakao_token_test </p>
+                          <!-- <p id="token-result" onclick="requestUserInfo()"> kakao_token_test </p> -->
 
 
 
@@ -175,6 +175,9 @@
       }
 
       const kakaoCode = getQueryParam('code');
+      // console.log("!!!!!!!!!!");
+      // console.log(kakaoCode);
+
 
     </script>
 
@@ -200,37 +203,6 @@
           , dataType: null
           , success : function(response) {
               Kakao.Auth.setAccessToken(response.access_token);
-              // document.querySelector('button.api-btn').style.visibility = 'visible';
-              // alert(JSON.stringify(response));
-              Kakao.API.request({
-                url: '/v2/user/me',
-              })
-                .then(function(res) {
-                  // const kakao_email = res.kakao_account.email;;
-                  // const kakao_id  = res.id;
-                  // const kakao_nickname = res.properties.nickname;
-
-                  $.ajax({
-                    type: "POST",
-                    url : "/kakao_login",
-                    data : {
-                      kakao_email : res.kakao_account.email,
-                      kakao_id : res.id,
-                      kakao_nickname : res.properties.nickname,
-                      kakao_code : kakaoCode
-                    }
-                  })
-                  // console.log(kakao_email, kakao_id, kakao_nickname);
-                  // console.log(JSON.stringify(res));
-                  // alert(JSON.stringify(res));
-
-                })
-                .catch(function(err) {
-                  alert(
-                    'failed to request user information: ' + JSON.stringify(err)
-                  );
-                });
-
           }
           ,error : function(jqXHR, error) {
           
@@ -250,7 +222,6 @@
             );
           });
       }
-
     </script>
 
   </body>

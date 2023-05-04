@@ -119,6 +119,7 @@ app.use('/book_search', require('./routes/server_book_search.js'));
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const KakaoStrategy = require('passport-kakao').Strategy;
 const session = require('express-session');
 
 app.use(session({secret : 'hidden', resave : true, saveUninitialized: false}));
@@ -126,107 +127,44 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
 app.get('/login_sign' , (req, res) => {
+    // const kakaoCode = req.query.code;
+    // console.log(kakaoCode);
+
+    // if (kakaoCode) {
+    //     axios.post('https://kauth.kakao.com/oauth/token', {
+    //         grant_type : 'authorization_code',
+    //         client_id : process.env.KAKAO_JS_KEY,
+    //         redirect_uri : process.env.REDIRECT_URL,
+    //         code : kakaoCode
+    //     }, {
+    //         headers: {
+    //             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+    //         }
+    //     })
+    //     .then(function (response) {
+    //         // Kakao.Auth.setAccessToken(response.data.access_token);
+    //         console.log(JSON.stringify(response.data));
+    //     })
+    //     .catch(function (error) {
+    //         console.log(error);
+    //     });
+    // }
     res.render('login_sign.ejs');
 }); 
 
-app.post('/kakao_login' , (req,res) => {
-    console.log(req.body.kakao_code);
-    // encodeURIComponent
-    // axios.post("https://kauth.kakao.com/oauth/token", 
-    // "grant_type=authorization_code" +
-    // "&client_id=" + `${process.env.KAKAO_REST_API_KEY}` +
-    // "&redirect_uri=" + (`${process.env.REDIRECT_URL}`) +
-    // "&code=" + `${req.body.kakao_code}`, {
-    //     headers: {
-    //         "Content-Type": "application/x-www-form-urlencoded"
-    //     }
-    // })
-    // // 성공적으로 access_token을 받았을 때의 동작
-    // .then((response) => {
-    //     console.log(response);
-    // })
-    // // access_token 요청이 실패했을 때의 동작
-    // .catch((error) => {
-    //     console.log(error);
-    // });
 
-    // --------------------------------------------------------------------------------------------------
+// , passport.authenticate('kakao')
+app.get('/login_sign/kakao', passport.authenticate('kakao', {
+    failureRedirect:
+        '/login_sign'
+}), function (req, res) {
+    // console.log(res);
+    console.log("kakao login test");
+    console.log(req.user);
+    res.render('index.ejs', { welcomeid: req.user.db_id });
+}); 
 
-    db.collection('DB_user').findOne({ db_id: req.body.kakao_email }, function (err, result) {
-        if(err) throw err;
-        
-        // 이미 가입되어 있어 login 으로 post를 보냅니다. 
-        if(result) {
-            axios.post(`${process.env.POST_URL}login_sign`, {
-                login_id: req.body.kakao_email,
-                login_password: req.body.kakao_id
-            }
-            , {
-                headers: {
-                    Cookie: `cookieName=${req.session.cookie}`,
-                    Authorization: `Bearer ${req.body.token}`
-                }
-            })
-                .then((req) => {
-                    console.log("카카오 로그인")
-                    console.log(req.config.data);
-                })
-                .catch((err) => {
-                    console.log("카카오 로그인 에러")
-                    console.log(err);
-                });
-
-
-
-            // console.log("카카오 로그인 시도")
-            // console.log("나와라세션")
-            // console.log(req.session);
-
-            // console.log(req.session.cookie);
-
-            // axios.post(`${process.env.POST_URL}login_sign`, {
-            //     login_id: req.body.kakao_email,
-            //     login_password: req.body.kakao_id
-            // }, {
-            //     headers: {
-            //         Cookie: `cookieName=${req.session.cookie}`,
-            //         Authorization: `Bearer ${req.body.token}`
-            //     }
-            // })
-            //     .then((req) => {
-            //         console.log("카카오 로그인")
-            //         console.log(req.config.data);
-            //     })
-            //     .catch((err) => {
-            //         console.log("카카오 로그인 에러")
-            //         console.log(err);
-            //     });
-
-        }
-        
-        // 신규 회원이기에 register로 post를 보냅니다.
-        else {
-            console.log("카카오 신규등록 시도")
-            axios.post(`${process.env.POST_URL}register`, {
-                regi_id: req.body.kakao_email,
-                regi_pw: req.body.kakao_id,
-                regi_name: req.body.kakao_nickname 
-            })
-                .then((req) => {
-                    console.log("카카오 신규회원 가입")
-                    console.log(req.config.data);
-
-                })
-                .catch((err) => {
-                    console.log("카카오 신규회원 가입 에러")
-                    console.log(err);
-                });
-        }
-
-    });
-});
 
 // passport.authenticate : 응답해주기 전 local방식으로 ID,PW 인증. / 인증 실패시 /fail로 이동
 app.post('/login_sign', passport.authenticate('local', {
@@ -248,7 +186,6 @@ app.post('/login_sign', passport.authenticate('local', {
     res.render('index.ejs', { welcomeid: req.user.db_id });
     //res.redirect('/')
 }); 
-
 
 
 app.get('/user_page' , logincheck, function(req, res) {
@@ -313,6 +250,71 @@ passport.use(new LocalStrategy({
         }
     })
 }));
+
+// //KakaoStrategy
+passport.use(new KakaoStrategy({
+    clientID: process.env.KAKAO_REST_API_KEY,
+    callbackURL: '/login_sign/kakao',  
+    },
+    async(accessToken, refreshToken, profile, done) => {
+        var get_id = profile._json.kakao_account.email
+        var get_pw = profile._json.id
+        var get_nickname = profile._json.properties.nickname
+        // console.log(accessToken, profile);
+        try {
+            let exUser = null;
+            const user = await new Promise((resolve, reject) => {
+                db.collection('DB_user').findOne({ db_id: get_id }, function (err, res) {
+                    if (err)  reject(err)
+                    if (res === null) {
+                        resolve(false)
+                    } else if (res.db_pw && get_pw === res.db_pw) {
+                        console.log(`kakao pass to passport.use()`);
+                        exUser = res;
+                        resolve(res)
+                    } else {
+                        resolve(false)
+                    }
+                })
+            })
+        
+            if (exUser) {
+                done(null, exUser);
+            } 
+            // 없는 정보. 회원 신규 생성.
+            else {
+                const regi = await new Promise((resolve, reject) => {
+                    db.collection('DB_user').insertOne({ db_id: get_id, db_pw : get_pw, db_name : get_nickname, admin : false }, function (err, res) {
+                        if (err)  reject(err)
+                        if (res) {
+                            console.log(`kakao 회원가입`);
+
+                            db.collection('DB_user').findOne({ db_id: get_id }, function (err, res) {
+                                if (err)  reject(err)
+                                if (res === null) {
+                                    resolve(false)
+                                } else if (res.db_pw && get_pw === res.db_pw) {
+                                    console.log(`가입 후 로그인 시도`);
+                                    newUser = res;
+                                    resolve(res)
+                                } else {
+                                    resolve(false)
+                                }
+                            })
+                            // resolve(res)
+                        } else {
+                            resolve(false)
+                        }
+                    })
+                })
+                done(null, newUser);
+            }
+        } catch(error) {
+            console.error(error);
+            done(error);
+        }
+    } 
+));
 
 // user.id를 바탕으로 세션데이터 생성 -> 쿠키로 생성 -> 브라우저 전송.
 passport.serializeUser(function(user, done){
