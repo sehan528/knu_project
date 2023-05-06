@@ -471,12 +471,11 @@ app.get('/edit/:Viewid',logincheck, function(req, res) {
 });
 
 /** 정보 수정 클라 -> DB  */
-app.put('/edit' , upload.single('img'), function(req, res) {
+app.put('/edit', logincheck, upload.single('img'), function(req, res) {
     var number =  req.body.post_number;
 
     // console.log(req.file.filename); // 클라이언트에서 전송한 데이터
     // console.log(req.body.img_holder);
-
 
     var post = {
         db_upload_post : req.body.post_number,
@@ -548,6 +547,27 @@ app.put('/edit' , upload.single('img'), function(req, res) {
     });
     
 });
+
+app.post('/bookissell', logincheck, function (req, res) {
+    // console.log(req.body);
+    var number =  req.body.post_num;
+    var isSell =  req.body.isSell;
+
+    db.collection('DB_bookUpload').updateOne( {db_upload_post: parseInt(number)}, 
+    {$set: {
+        db_is_Sell : isSell
+    }}, 
+    function(err,result){
+        
+        if(err) return console.log(err);
+
+        console.log('판매완료 업데이트');
+        res.redirect('/user_page');
+        
+    });
+
+
+})
 
 app.delete('/delete', logincheck, function(req, res) {
     req.body._id = parseInt(req.body._id);

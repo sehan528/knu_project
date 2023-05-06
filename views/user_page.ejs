@@ -33,29 +33,33 @@
 
         <div class="container">
             <% for (var i=0; i < posts.length; i ++) { %>
-                <div class="border border-white" style="max-width: 400px; margin: 10px auto;"
+                <div class="border border-white" style="max-width: 400px; margin: 15px auto;"
                     data-spy="scroll"
                     data-target="#navbar-example2" data-offset="0">
+
                     <ul class="list-group">
-                        <li class="list-group-data">
-                            <div class="row g-2">
+                        <div class="list-group-data">
+                            <div class="row g-2 card-t">
                                 <div class="col-4">
-                                    <img src="/public/image/<%= posts[i].db_upload_img %>" class="rounded-start img-fluid"
-                                        alt="서적 이미지">
+                                    <img src="/public/image/<%= posts[i].db_upload_img %>" class="rounded-start img-fluid" alt="서적 이미지">
                                 </div>
 
-                                <div class="col-8" align="left">
-                                    <div class="card-body bg-dark" style="color: aliceblue">
+                                <div class="col-8 " align="left">
+                                    <div class="card-body bg-main" style="color: black">
                                         <div class="mini-container" onclick="location.href='/used_view/<%= posts[i].db_upload_post %>'">
                                             <h5 class="card-title">
                                                 <%= posts[i].db_upload_Name %>
                                             </h5>
                                             <p class="card-text">
                                                 <%= posts[i].db_upload_Author %>
-                                            </p>    
+                                            </p>
                                         </div>
-                                        <a class="btn btn-dark" href="/edit/<%= posts[i].db_upload_post %>" role="button">수정</a>
-                                        <a class="btn btn-dark delete" data-id="<%= posts[i].db_upload_post %>">삭제</a>
+                                        <% if(posts[i].db_is_Sell == null) { %>
+                                        <a class="btn btn-light" href="/edit/<%= posts[i].db_upload_post %>" role="button">수정</a>
+                                        <% }%>
+                                        <a class="btn btn-light delete" data-id="<%= posts[i].db_upload_post %>">삭제</a>
+                                        <!-- 여백 용도. 지우지 마세요! -->
+                                        <p> </p>    
                                     </div>
                                 </div>
                             </div>

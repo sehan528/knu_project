@@ -23,19 +23,19 @@
 
         <div class="col-md-6">
             <label for="book-name" class="form-label">책 제목</label>
-            <input value="<%= getData.db_upload_Name %>" type="text" class="form-control" id="book-name"
+            <input value="<%= getData.db_upload_Name %>" type="text" class="form-control card-t" id="book-name"
                 name="book_name">
         </div>
 
         <div class="col-md-6">
             <label for="book-author" class="form-label">저자</label>
-            <input value="<%= getData.db_upload_Author %>" type="text" class="form-control" id="book-author"
+            <input value="<%= getData.db_upload_Author %>" type="text" class="form-control card-t" id="book-author"
                 name="book_author">
         </div>
 
         <div class="col-12">
             <label for="price" class="form-label">희망 가격</label>
-            <input value="<%= getData.db_upload_Price %>" type="text" class="form-control" id="price" name="book_price">
+            <input value="<%= getData.db_upload_Price %>" type="text" class="form-control card-t" id="price" name="book_price">
         </div>
 
         <div class="row mb-3">
@@ -72,7 +72,7 @@
 
         <div class="mb-3">
             <label for="formFile" class="form-label">이미지</label>
-            <input class="form-control" type="file" id="formFile" name="img"
+            <input class="form-control card-t" type="file" id="formFile" name="img"
                 value="<%=getData.db_upload_img %>">
         </div>
 
@@ -82,25 +82,16 @@
         </div>
 
 
-        <!-- <img src="<%= getData.db_upload_Image %>" alt="이미지"> -->
-
-        <!-- <form action="/edit" method="post" enctype="multipart/form-data">
-                <label for="image">Select an image to upload:</label>
-                <input type="file" name="image" id="image">
-                <input type="hidden" name="id" value="<%= getData.db_upload_Id %>">
-                <input type="submit" value="Upload Image" name="submit">
-            </form> -->
-
-
         <div class="mb-3">
             <label for="Textarea1" class="form-label">게시글 작성</label>
-            <textarea id="Textarea" type="text" class="form-control" style="height: 200px;" rows="3"
+            <textarea id="Textarea" type="text" class="form-control card-t" style="height: 200px;" rows="3"
                 name="comment"><%= getData.db_upload_Comment %></textarea>
         </div>
 
 
         <div class="col-12 text-center">
-            <button type="submit" class="btn btn-outline-light">업로드</button>
+            <div class="btn btn-outline-secondary card-t" name="myCheckbox" value="isSell" onclick="confirmSale()">판매완료</div>
+            <button type="submit" class="btn btn-outline-secondary card-t">업로드</button>
         </div>
 
     </form>
@@ -113,15 +104,6 @@
 
     <!-- Load jquery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-
-    <script>
-        // const imgInput = document.querySelector('input[name="img"]');
-        // const imgNameInput = document.querySelector('input[name="img_name"]');
-        
-        // imgInput.addEventListener('change', () => {
-        // imgNameInput.value = imgInput.value;
-        // });
-    </script>
 
 
     <script>
@@ -149,6 +131,35 @@
             }
         }
     </script>
+
+    <script>
+    function confirmSale(event){
+        if (confirm("판매 완료 처리하는 경우, 해당 게시글에 대한 재수정이 불가합니다. \n정말 누르시겠습니까?")) {
+          // "OK" 버튼을 누른 경우
+            console.log("Item deleted.");
+            $.ajax({
+                url: "/bookissell",
+                method: "POST",
+                data: { 
+                    isSell: "on", 
+                    post_num: "<%= getData.db_upload_post %>" 
+                },
+                success: function(data) {
+                console.log("POST 요청 성공:", data);
+                window.location.href = "/user_page";
+            },
+            error: function(xhr, status, error) {
+                console.error("POST 요청 실패:", error);
+            }
+            });
+
+        } else {
+          // "Cancel" 버튼을 누른 경우
+            console.log("Deletion cancelled.");
+        }
+    }
+    </script>
+
 </body>
 
 </html>
