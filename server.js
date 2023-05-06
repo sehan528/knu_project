@@ -197,6 +197,7 @@ app.get('/user_page' , logincheck, function(req, res) {
     }); // 모든 데이터 탐색.
 })
 
+
 app.get('/user_messenger' , logincheck, function(req, res) {
     // console.log(req.user._id);
     db.collection('DB_chatList').find({member: ObjectId(req.user._id)}).toArray(function(err, result) {
@@ -335,7 +336,6 @@ passport.deserializeUser(function(get_id, done){
         // console.log(res);
     })
 });
-
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
