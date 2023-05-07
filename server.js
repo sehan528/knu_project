@@ -620,16 +620,28 @@ app.delete("/delete", logincheck, function (req, res) {
   var postId = { db_upload_post: req.body._id };
   console.log(postId);
 
-  db.collection("DB_bookUpload").deleteOne(postId, function (err, result) {
+  db.collection("DB_bookUpload").findOne(postId, function (err, result) {
     if (err) throw err;
-    console.log("삭제 완료");
-    res.status(200).send({ message: "삭제에 성공 했습니다." });
+    if (!result) {
+      return res
+        .status(404)
+        .send({ message: "삭제할 게시글을 찾을 수 없습니다." });
+    }
 
-    db.collection("DB_postCount").updateOne(
-      { name: "DB_PSCNT" },
-      { $inc: { totalPost: -1 } },
-      function (err, res) {
-        if (err) return console.log(err);
+    db.collection("DB_chatList").deleteMany(
+      { chat_Title: result.db_upload_Name },
+      function (err, result) {
+        if (err) throw err;
+        console.log("삭제 완료");
+        res.status(200).send({ message: "삭제에 성공 했습니다." });
+
+        db.collection("DB_postCount").updateOne(
+          { name: "DB_PSCNT" },
+          { $inc: { totalPost: -1 } },
+          function (err, res) {
+            if (err) return console.log(err);
+          }
+        );
       }
     );
   });
