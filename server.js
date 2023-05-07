@@ -618,7 +618,6 @@ app.post("/bookissell", logincheck, function (req, res) {
 app.delete("/delete", logincheck, function (req, res) {
   req.body._id = parseInt(req.body._id);
   var postId = { db_upload_post: req.body._id };
-  console.log(postId);
 
   db.collection("DB_bookUpload").findOne(postId, function (err, result) {
     if (err) throw err;
@@ -632,14 +631,25 @@ app.delete("/delete", logincheck, function (req, res) {
       { chat_Title: result.db_upload_Name },
       function (err, result) {
         if (err) throw err;
-        console.log("삭제 완료");
-        res.status(200).send({ message: "삭제에 성공 했습니다." });
 
-        db.collection("DB_postCount").updateOne(
-          { name: "DB_PSCNT" },
-          { $inc: { totalPost: -1 } },
-          function (err, res) {
-            if (err) return console.log(err);
+        console.log("DB_chatList 삭제 완료");
+
+        db.collection("DB_bookUpload").deleteOne(
+          postId,
+          function (err, result) {
+            if (err) throw err;
+
+            console.log("DB_bookUpload 삭제 완료");
+
+            db.collection("DB_postCount").updateOne(
+              { name: "DB_PSCNT" },
+              { $inc: { totalPost: -1 } },
+              function (err, result) {
+                if (err) throw err;
+
+                res.status(200).send({ message: "삭제에 성공 했습니다." });
+              }
+            );
           }
         );
       }
