@@ -13,7 +13,18 @@
 </head>
 
 <body class="bg-main">
-
+    <style>
+        #logoutButton {
+          background-color: black;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+      </style>
+        <button id="logoutButton">로그아웃</button>
+      
     <%- include('nav3.html') %>
 
         <h3 class="ml-2 my-3 text-center">
@@ -94,6 +105,29 @@
                     console.log(xhr, textStatus, errorThrown);
                 });
             });
+
+
+
+            
+            const logoutButton = document.querySelector("#logoutButton");
+
+            logoutButton.addEventListener("click", () => {
+            fetch("/logout", {
+                method: "GET",
+            })
+                .then((response) => {
+                if (response.ok) {
+                    window.location.href = "/book_search";
+                } else {
+                    throw new Error("로그아웃 실패");
+                }
+                })
+                .catch((error) => {
+                console.error(error);
+                });
+            });
+
+
         </script>
         
 
