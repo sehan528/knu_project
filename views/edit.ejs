@@ -24,19 +24,27 @@
         <div class="col-md-6">
             <label for="book-name" class="form-label">책 제목</label>
             <input value="<%= getData.db_upload_Name %>" type="text" class="form-control card-t" id="book-name"
-                name="book_name">
-        </div>
-
-        <div class="col-md-6">
+                name="book_name" required
+                pattern="^[a-zA-Z0-9가-힣]{1,16}$"
+                oninvalid="this.setCustomValidity('책 제목을 다시 확인해주세요. 한 글자 이상, 16자 이내의 영문, 숫자, 한글로만 이루어져 있어야 합니다.')"
+                oninput="setCustomValidity('')">
+          </div>
+          
+          <div class="col-md-6">
             <label for="book-author" class="form-label">저자</label>
             <input value="<%= getData.db_upload_Author %>" type="text" class="form-control card-t" id="book-author"
-                name="book_author">
+                name="book_author" required pattern="^[a-zA-Z가-힣0-9]{1,16}$"
+                oninvalid="this.setCustomValidity('저자를 다시 확인해주세요. 1글자 이상 16글자 이내의 영문, 숫자, 한글로만 이루어져야 합니다.')"
+                oninput="setCustomValidity('')">
         </div>
+    
 
         <div class="col-12">
             <label for="price" class="form-label">희망 가격</label>
-            <input value="<%= getData.db_upload_Price %>" type="text" class="form-control card-t" id="price" name="book_price">
+            <input value="<%= getData.db_upload_Price %>" type="text" class="form-control card-t" id="price" name="book_price"
+                pattern="^[0-9]{4,8}$" oninvalid="this.setCustomValidity('희망 가격을 다시 확인 해주십시오. 숫자 4자리 이상 8자리 이하이어야 합니다.')" oninput="setCustomValidity('')">
         </div>
+        
 
         <div class="row mb-3">
 
@@ -84,10 +92,9 @@
 
         <div class="mb-3">
             <label for="Textarea1" class="form-label">게시글 작성</label>
-            <textarea id="Textarea" type="text" class="form-control card-t" style="height: 200px;" rows="3"
-                name="comment"><%= getData.db_upload_Comment %></textarea>
+            <textarea id="Textarea" type="text" class="form-control card-t" style="height: 200px;" rows="3" name="comment" required minlength="10" maxlength="100" oninvalid="this.setCustomValidity('게시글을 10글자 이상 100글자 이하로 작성해주세요.')" oninput="setCustomValidity('')"><%= getData.db_upload_Comment %></textarea>
         </div>
-
+        
 
         <div class="col-12 text-center">
             <div class="btn btn-outline-secondary card-t" name="myCheckbox" value="isSell" onclick="confirmSale()">판매완료</div>
