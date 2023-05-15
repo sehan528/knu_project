@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>서점 검색</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/main.css">
+
+    <style>
+
+        .section-title {
+            margin-top: 20px;
+        }
+
+        .book-info li {
+            margin-bottom: 50px;
+        }
+
+        .kyobo,
+        .yes24,
+        .aladin {
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+    
+        .kyobo:hover,
+        .yes24:hover,
+        .aladin:hover {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body class="bg-main">
+    <!-- <h3><%= JSON.stringify(data) %></h3> -->
+    <%- include('nav.html') %>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-5">
+                <img src="<%= data[0].INFO[0].img %>" alt="책 이미지" class="img-fluid">
+            </div>
+            <div class="col-md-7">
+                <h3><%= data[0].name %></h3>
+
+                <h4 class="section-title">도서 정보</h4>
+                <ul class="book-info">
+                    <% data[0].INFO.forEach(function(info) { %>
+                        <li>
+                            <strong>제목:</strong> <%= info.name %><br>
+                            <strong>저자:</strong> <%= info.author %><br>
+                            <strong>출판사:</strong> <%= info.bookstore %><br>
+                            <strong>출간일:</strong> <%= info.date %><br>
+                        </li>
+                    <% }) %>
+                </ul>
+                <h4 class="section-title">원가 : <%= data[0].origin_price %> </h4>
+                <br class="section-title">
+                <br class="section-title">
+                <h4 class="section-title">서점 링크</h4>
+
+                <div class="kyobo">
+                    <div class="row align-items-center">
+                        <div class="col-4">
+                            <button class="btn btn-link btn-sm rounded-0 border-0">
+                                <a href="<%= data[0].kyobo %>">
+                                    <img src="/public/image/kyobo.jpg" alt="교보문고" />
+                                </a>
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <h5>가격: <%= data[0].kyobo_price %> </h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>수량: <%= data[0].kyobo_cnt %> </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="yes24">
+                    <div class="row align-items-center">
+                        <div class="col-4">
+                            <button class="btn btn-link btn-sm rounded-0 border-0">
+                                <a href="<%= data[0].yes24 %>">
+                                    <img src="/public/image/yes24.jpg" alt="예스24"  />
+                                </a>
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <h5>가격: <%= data[0].yes24_price %> </h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>수량: <%= data[0].yes24_cnt %> </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="aladin">
+                    <div class="row align-items-center">
+                        <div class="col-4">
+                            <button class="btn btn-link btn-sm rounded-0 border-0">
+                                <a href="<%= data[0].aladin %>">
+                                    <img src="/public/image/aladin.jpg" alt="알라딘"  />
+                                </a>
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <h5>가격: <%= data[0].aladin_price %> </h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>수량: <%= data[0].aladin_cnt %> </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

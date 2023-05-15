@@ -1,6 +1,5 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-
 var router = require('express').Router();
 
 let courses = [];   // 서점 별 검색 결과를 담는다.
@@ -114,7 +113,5 @@ router.get('/', function(req, res) {
 
 
 });
-
-
 
 module.exports = router;

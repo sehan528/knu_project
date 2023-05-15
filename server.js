@@ -99,7 +99,7 @@ app.get('/used_book', (req,res) => {
 
 });
 
-    // res.render('used_book.ejs');
+
 
 
 
@@ -109,7 +109,9 @@ app.get('/used_book', (req,res) => {
 
 // 라우팅
 
-app.use('/book_search', require('./routes/server_book_search.js'));
+// app.use('/book_search', require('./routes/server_book_search.js'));
+app.use('/bookstore_search', require('./routes/build_booklist_f_naver.js'));
+app.use('/used_store', require('./routes/usedstore_crawling.js'));
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -460,7 +462,44 @@ app.get('/used_view/:Viewid', (req,res) => {
     })
 });
 
+/** 검색글 상세보기  */
+// var detailpost;
+// app.post('/used_store', (req,res) => {
+//     console.log("POST");
+//     console.log(req.body);
+//     detailpost = req.body;
+//     res.render('used_store.ejs', {data : detailpost});
+// });
+
+app.get('/go_used_store', async (req,res) => {
+    console.log("go used store");
+    // console.log(req.query);
+    const sendData = req.query;
+    // console.log(sendData);
+    // res.render('used_store.ejs', {data : sendData});
+        // usedstore_crawling.js 실행
+    try {
+        const crawledData = await require('./routes/usedstore_crawling.js').crawlData();
+        // crawledData는 크롤링한 데이터입니다.
+
+        // used_store.ejs 렌더링
+        res.render('used_store.ejs', { data: crawledData });
+    } catch (error) {
+        console.error("Error during crawling:", error);
+        // 오류 처리
+        res.send("Error during crawling");
+    }
+});
+
+// app.get('/used_store/:Viewid', (req, res) => {
+//     console.log("GET");
+//     console.log(req.params.Viewid);
+//     res.render('used_store/' + req.params.Viewid + '.ejs', { data: req });
+// });
+
+
 // ------------------------------------------------------------------------------------------------------------------
+
 
 /** 정보 수정을 위한 데이터  DB -> 클라  */
 app.get('/edit/:Viewid',logincheck, function(req, res) {

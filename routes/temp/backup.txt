@@ -1,0 +1,73 @@
+const axios = require('axios');
+const cheerio = require('cheerio');
+var router = require('express').Router();
+
+let courses = [];   // 서점 별 검색 결과를 담는다.
+// let store = 'yes24';
+
+router.get('/', function(req, res) {
+
+    const SN = req.query.value;
+    let store = req.query.store;
+    console.log(SN,store);
+
+    const getHTML = async(keyword) => {
+        try {
+            if(store === `REL`){
+                return await axios.get(`https://search.shopping.naver.com/book/search?bookTabType=ALL&query=` + encodeURI(keyword) + `&sort=` + store); // pagination limit.
+            }
+            
+            else if (store === `DATE`) {
+                return await axios.get(`https://search.shopping.naver.com/book/search?bookTabType=ALL&pageIndex=1&pageSize=40&query=` + encodeURI(keyword) + `&sort=` + store); // pagination limit.
+            } 
+
+            else {
+                return await axios.get(`https://search.shopping.naver.com/book/search?bookTabType=ALL&pageIndex=1&pageSize=40&query=` + encodeURI(keyword) + `&sort=REVIEW`); // pagination limit.    
+            } 
+        } 
+        catch (err) {
+            console.log(err);
+        }
+    }
+        
+    const parsing = async (keyword) => {
+        const html = await getHTML(keyword);
+        const $ = cheerio.load(html.data);
+
+        
+            const $couresList = $("#container > div > div.bookSearch_book_search__Hp2Ly > div > div:nth-child(3) > ul");
+            courses = [];
+                    
+            $couresList.each((idx, node) => {
+                // idx = 1;   
+                courses.push({
+                title: $(node).find("li > div > a > div > div > span > span").text(),
+                // author: $(node).find("div > div.item_info > div.info_row.info_pubGrp > span.authPub.info_auth > a:nth-child(1)").text(),
+                // date: $(node).find("div > div.item_info > div.info_row.info_pubGrp > span.authPub.info_date").text(),
+                // price: $(node).find("div > div.item_info > div.info_row.info_price > span:nth-child(1) > strong > em").text() + "원",
+                // img: $(node).find('em > img').attr('data-original'),
+                // link : "http://www.yes24.com" + $(node).find("div > div.item_info > div.info_row.info_storeLoca > dl > dd > span > a").attr('href'),
+                // marker : store
+                })
+                console.log(courses);
+            });
+        
+
+        // res.render('book_search.ejs' , {data : courses, name: req.query.value, now_keyword: SN, now_store: store} )
+        if(typeof SN === 'undefined') {
+            res.render('bookstore_search.ejs', {data: '', name: '', now_keyword: '', now_store: ''});
+        } else {
+            res.render('bookstore_search.ejs', {data: courses, name: req.query.value, now_keyword: SN, now_store: store});
+        }
+    }
+
+    parsing(req.query.value);
+
+
+
+
+
+
+});
+
+module.exports = router;

@@ -63,11 +63,11 @@
         <div class="form-group has-search">
             <span class="fa fa-search form-control-feedback"></span>
             <div id="recent-searches">
-                <form method="get" action="/book_search">
+                <form method="get" action="/bookstore_search">
+                    <input type="hidden" name="store" value="SINDEX_ONLY">
                     <input type="text" class="form-control card-t" name="value" placeholder="Search">
                 </form>
             </div>
-
         </div>
         <p class="mt-4 text-center"><a href="https://www.google.co.kr/">I'll google</a></p>
     </div>

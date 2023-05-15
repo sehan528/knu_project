@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must0revalidate" />
+  <meta http-equiv="Pragme" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <title>서점 검색</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
+
+  <link rel="stylesheet" href="/public/main.css" />
+
+  <style>
+    /* 도서 사이트 버튼 설정*/
+    .search-buttons {
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-button {
+      border: none;
+      background-color: transparent;
+      padding: 0;
+      margin: 20px auto;
+      opacity: 1;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .search-button:hover,
+    .search-button:focus {
+      opacity: 0.8;
+    }
+
+    .search-button:active {
+      opacity: 0.6;
+    }
+  </style>  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+</head>
+
+<body class="bg-main">
+  <%- include('nav.html') %>
+    <div class="main" style="min-width: 400px" align="center">
+      <div class="wrapper">
+        <div class="form-group has-search" style="max-width: 500px">
+          <!-- <h3> <%= now_keyword %> </h3> -->
+          <div class="row">
+    
+            <div class="btn-group col-3" role="group" aria-label="Button group with nested dropdown">
+              <div class="btn-group search-buttons" role="group">
+                <button id="searchConditionBtn" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  검색조건
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" data-site="SINDEX_ONLY" onclick="changeStore('SINDEX_ONLY'); updateSearchCondition(this)">인기도순</a></li>
+                  <li><a class="dropdown-item" data-site="CONT_CNT" onclick="changeStore('CONT_CNT'); updateSearchCondition(this)">평점순</a></li>
+                  <li><a class="dropdown-item" data-site="REVIEW_CNT" onclick="changeStore('REVIEW_CNT'); updateSearchCondition(this)">리뷰순</a></li>
+                </ul>
+              </div>
+            </div>
+    
+            <form class="form col-9">
+              <input required maxlength="30" type="text" class="form-control card-t" name="value" placeholder="Search"
+                onkeydown="search(event)" />
+            </form>
+          </div>
+
+          <!-- <div class="search-buttons" style="display: flex" align="center">
+            <button class="search-button yes24" data-site="SINDEX_ONLY" onclick="changeStore('SINDEX_ONLY')">
+            </button>
+
+            <button class="search-button aladin" data-site="CONT_CNT" onclick="changeStore('CONT_CNT')">
+              <img src="/public/image/aladin.jpg" alt="알라딘" width="100" height="40" />
+            </button>
+
+            <button class="search-button kyobo" data-site="REVIEW_CNT" onclick="changeStore('REVIEW_CNT')">
+              <img src="/public/image/kyobo.jpg" alt="교보문고" width="100" height="40" />
+            </button>
+          </div> -->
+    
+    
+          <button type="submit" form="todo-form" style="display: none">
+            제출하기
+          </button>
+    
+          <div class="todo-inner" style="color: #0c0b0b">
+            <h4 class="tit">최근 검색어</h4>
+            <div class="row">
+              <p class="txt"></p>
+              <ul id="todo-list" style="display: flex; justify-content: center;"></ul>
+              <span class="btn allDelete off" style="background-color: #8c8c8c">전체삭제🗑️</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    
+    
+    
+    
+      <!-- 1) 기타 책은 10개 이하로 등록되어 10개로 짜를 수 없는 경우가 생겨서 예외처리가 필요했다.-->
+      <div id="output">
+        <div>
+          <% for (var i=0; i < data.length; i++) { %>
+            <!-- onclick="javascript:getdetail();"  -->
+            <div class="border border-white abox tbox" style="max-width: 500px; margin: 10px auto" data-spy="scroll"
+              data-target="#navbar-example2" data-offset="0" type='button'>
+              <div class="row g-2 card-t lookDetail">
+                <div class="col-4">
+                  <img src="<%=data[i].img %>" class="rounded-start img-fluid" alt="..." />
+                </div>
+                <div class="col-8" align="left">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <%=data[i].name%>
+                    </h5>
+                    <p class="card-text">
+                      <%=data[i].author%>
+                    </p>
+                    <p class="card-text">
+                      <%=data[i].bookstore%>
+                    </p>
+                    <p class="card-text">
+                      <small class="text-muted">
+                        <%=data[i].date%>
+                      </small>
+                    </p>
+                    <p class="card-text ref_link" style="display: none;">
+                      <%=data[i].link%>
+                    </p>
+                  </div>
+                </div>
+              </div>
+    
+            </div>
+            <figuercaption> click </figuercaption>
+            <% } %>
+        </div>
+    
+    
+      </div>
+    </div>
+
+    <div id="buttons" class="d-flex justify-content-center"></div>
+
+    <script>
+      let store = "<%= now_store %>" || "SINDEX_ONLY";
+      let now_store = "SINDEX_ONLY";
+      // console.log(store); // ejs render 된 값이 없다면 yes24.
+  
+      window.onload = function () {
+        const dataSize = "<%= data ? data.length : 0 %>";
+        const data = JSON.parse('<%- JSON.stringify(data) %>');
+        // const now_store = "예스24";
+        // console.log(data);
+        displayData(1);
+      };
+  
+      function changeStore(value) {
+        store = value;
+        console.log(store);
+      }
+  
+      function search(event) {
+        if (event.keyCode === 13) {
+          console.log(store);
+          const form = document.querySelector(".form");
+          const inputValue = form.querySelector('input[name="value"]').value;
+          const url = `/bookstore_search?value=${inputValue}&store=${store}`;
+          window.location.href = url;
+        }
+      }
+      // 출력된 결과물을 지우는 함수
+      function remove() {
+        const outputDiv = document.getElementById("output");
+  
+        while (outputDiv.firstChild) {
+          outputDiv.removeChild(outputDiv.firstChild);
+        }
+      }
+  
+      function displayData(page) {
+        const outputDiv = document.getElementById("output");
+        const start = (page - 1) * 10;
+        const dataSize = "<%= data ? data.length : 0 %>";
+        const data = JSON.parse('<%- JSON.stringify(data) %>');
+        const end = Math.min(start + 10, dataSize, (page * 10));
+        remove()
+        
+        // onclick="location.href='${data[i].link}'"
+        for (let i = start; i < end; i++) {
+          const newDiv = document.createElement("div");
+          newDiv.innerHTML = `
+            <div class="border border-white abox " style="max-width: 500px; min-width: 300px; margin: 10px auto"
+              data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+              <button class="btn btn-outline-secondary card-t lookDetail">
+                <div class="row g-2">
+                  <div class="col-4 "><img src="${data[i].img}" style="width: 400px" class="rounded-start img-fluid" alt="..."/></div>
+                  <div class="col-8 " align="left">
+                    <div class="card-body">
+                      <h5 class="card-title">${data[i].name}</h5>
+                      <p class="card-text">${data[i].author}</p>
+                      <p class="card-text">${data[i].bookstore}</p>
+                      <p class="card-text"><small class="text-muted">${data[i].date}</small></p>
+                      <p class="card-text ref_link"style="display: none;" > ${data[i].link} </p>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </div>
+          `;
+          outputDiv.appendChild(newDiv);
+        }
+
+        $(".lookDetail").click(function() {
+          console.log("entry");
+          var name = $(this).find(".card-title").text().trim();
+          var link = $(this).find(".ref_link").text().trim();
+
+          $.ajax({
+            url: "/go_used_store",
+            method: "GET",
+            data: { name: name, link: link },
+            success: function(response) {
+              // console.log(response);
+              var data = { name: name, link: link };
+              window.location.href = '/used_store?' + $.param(data);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus, errorThrown);
+              // 에러가 발생했을 때 실행할 코드
+            }
+          });
+        });
+
+        // 하단 pagination container
+        const buttonsContainer = document.getElementById("buttons");
+        buttonsContainer.innerHTML = "";
+        const numPages = dataSize === 0 ? 1 : Math.ceil(dataSize / 10);
+        const maxButtons = 3;
+  
+        let startPage = page - Math.floor(maxButtons / 2);
+        let endPage = startPage + maxButtons - 1;
+  
+        if (startPage < 1) {
+          startPage = 1;
+        }
+  
+        if (endPage > numPages) {
+          endPage = numPages;
+          startPage = endPage - maxButtons + 1;
+          if (startPage < 1) {
+            startPage = 1;
+          }
+        }
+  
+        if (page > 1) {
+          const prevHtml = `
+                    <button onclick="displayData(${page - 1})"><</button>`;
+          buttonsContainer.innerHTML += prevHtml;
+        }
+  
+        for (let i = startPage; i <= endPage; i++) {
+          const start = (i - 1) * 10 + 1;
+          const end = Math.min(start + 10, data.length);
+          const buttonHtml = `<button id="button${i}" onclick="displayData(${i})">${i}</button>`;
+  
+          if (buttonsContainer) {
+            buttonsContainer.innerHTML += buttonHtml;
+          }
+        }
+  
+        if (page < numPages) {
+          const nextHtml = `
+              <button onclick="displayData(${page + 1})">></button>`;
+          buttonsContainer.innerHTML += nextHtml;
+        }
+      }
+
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous">
+    </script>
+    <!-- Load jquery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+    <script src="/public/scripts/save_searchkeyword.js"></script>
+
+    <script>
+      // 페이지가 로드될 때 실행되는 함수
+      window.addEventListener('DOMContentLoaded', function () {
+        // 로컬 스토리지에서 검색조건 값을 가져옴
+        var searchCondition = localStorage.getItem('searchCondition');
+
+        // 검색조건 값이 있으면 텍스트 업데이트
+        if (searchCondition) {
+          document.getElementById('searchConditionBtn').textContent = searchCondition;
+        }
+      });
+
+      // 검색조건 업데이트 함수
+      function updateSearchCondition(element) {
+        var selectedText = element.textContent;
+        document.getElementById('searchConditionBtn').textContent = selectedText;
+
+        // 로컬 스토리지에 검색조건 값을 저장
+        localStorage.setItem('searchCondition', selectedText);
+
+        // 리스트에서 클릭한 글씨를 숨김 처리
+        var dropdownItems = document.getElementsByClassName('dropdown-item');
+        for (var i = 0; i < dropdownItems.length; i++) {
+          var item = dropdownItems[i];
+          if (item === element) {
+            item.style.display = 'none';
+          } else {
+            item.style.display = 'block';
+          }
+        }
+      }
+
+    </script>
+
+    <!-- <script>
+      // var nowKeyword = "<%= now_keyword %>";
+    </script> -->
+
+    <!-- <script>
+        $(".lookDetail").click(function() {
+          console.log("entry");
+          var name = $(this).find(".card-title").text().trim();
+          var link = $(this).find(".ref_link").text().trim();
+          // location.href = "/used_store";
+          // window.location.href = "/used_store?name=" + name + "&link=" + link;
+
+          $.ajax({
+            url: "/go_used_store",
+            method: "GET",
+            data: { name: name, link: link },
+            success: function(response) {
+              // console.log(response);
+              var data = { name: name, link: link };
+              window.location.href = '/used_store?' + $.param(data);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.log(textStatus, errorThrown);
+              // 에러가 발생했을 때 실행할 코드
+            }
+          });
+        
+          // console.log(name, link);
+          // window.location.href = "/used_store?" + $.param({ name: name, link: link });
+
+
+        // $.ajax({
+        //   url: "/used_store",
+        //   type: "POST",
+        //   data: { 
+        //     name: name,
+        //     link: link},
+        //   success: function(response) {
+
+        //     $.ajax({
+        //       url: "/used_store",
+        //       type: "GET",
+        //       data: { 
+        //         name: name,
+        //         link: link},
+
+        //       success: function(response) {
+        //         // location.href = "/used_store";
+        //       },
+        //       error: function(xhr, status, error) {
+        //         console.error(error);
+        //       }
+        //     });
+        //   },
+
+        //   error: function(xhr, status, error) {
+        //     console.error(error);
+        //   }
+        // });
+      
+      });
+    </script> -->
+
+
+
+
+
+
+
+
+  
+</body>
+
+</html>
