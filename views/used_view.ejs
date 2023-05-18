@@ -107,17 +107,17 @@
                 //     console.log("전송완료");
                 //     window.location.href = '/user_chat';
                 // });
-
+                // window.location.href = '/user_messenger';
                 $.post('/chatList', { Receiver: id, bookName: title, Uploder: writer }).then((response) => {
-                    if (response === '잘못된 접근입니다. 다시 확인해주세요.') {
+                    if (response.message === '잘못된 접근입니다. 다시 확인해주세요.') {
                         alert('잘못된 접근입니다. 다시 확인해주세요.');
                     } else {
                         console.log("전송완료");
-                        window.location.href = '/user_chat';
+                        const id = response.chatId; // response의 chatId 값을 id 변수로 할당합니다.
+                        window.location.href = '/user_chat?id=' + id;
                     }
                 });
             });
         </script>
 </body>
-
 </html>

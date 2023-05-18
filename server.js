@@ -660,11 +660,27 @@ app.post('/chatList', logincheck, function(req, res) {
 
         if (result || CHATINFO.member[0].toString() === CHATINFO.member[1].toString()) {
             // 이미 해당 채팅방이 존재하는 경우
-            res.send('잘못된 접근입니다. 다시 확인해주세요.');
+            const response = {
+                message: message,
+            };
+            const message = '잘못된 접근입니다. 다시 확인해주세요.';
+            res.json(response);
         } else {
             // 해당 채팅방이 존재하지 않는 경우
-            db.collection('DB_chatList').insertOne(CHATINFO).then((result)=>{
-                res.send('DB_chatList 신규 등록. 대화방이 생성되었음.');
+            db.collection('DB_chatList').insertOne(CHATINFO, function (err, result) {
+                if (err) {
+                    // 오류 처리
+                    console.error(err);
+                    return;
+                }
+                // 삽입된 문서의 _id 값을 받습니다.
+                const insertedId = result.insertedId;
+                const message = 'DB_chatList 신규 등록. 대화방이 생성되었음.';
+                const response = {
+                    message: message,
+                    chatId: insertedId
+                };
+                res.json(response);
             });
         }
     });

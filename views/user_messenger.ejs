@@ -78,9 +78,12 @@
 
         <script>
             $(document).ready(function () {
+                // var urlParams = new URLSearchParams(window.location.search);
+                // 지금누른채팅방id = urlParams.get('id');
+                console.log(지금누른채팅방id);
                 $('.list-group-item').click(function () {
-                    // location.href = '/user_chat';
                     var chatId = $(this).attr('data-id');
+                    console.log(chatId);
                     location.href = '/user_chat?id=' + chatId;
                 });
             });

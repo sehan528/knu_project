@@ -71,7 +71,9 @@
         </script>
 
         <script>
-            var 지금누른채팅방id;
+            var testtt = chatId = new URLSearchParams(window.location.search).get('id');
+            // console.log(testtt);
+            var 지금누른채팅방id = testtt;
             var eventSource;
             var 건사람 = $('#chathost').text();
             var 호스트 = "<%= host %>";
