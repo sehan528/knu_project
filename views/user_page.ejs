@@ -15,7 +15,6 @@
 <body class="bg-main">
 
     <%- include('nav3.html') %>
-
         <h3 class="ml-2 my-3 text-center">
             <%= 사용자.db_id %>님이 판매 중인 서적
         </h3>
@@ -94,6 +93,21 @@
                     console.log(xhr, textStatus, errorThrown);
                 });
             });
+
+
+            function logout() {
+                fetch('/logout', { method: 'POST' }) // 서버에 POST 요청 전송
+                .then(() => {
+                    // 로그아웃 성공 시 처리할 코드
+                    // 예: 로그아웃 메시지 표시 또는 리다이렉트
+                    window.location.href = '/'; // 로그아웃 후 메인 페이지로 이동
+                })
+                .catch((error) => {
+                    // 로그아웃 실패 시 처리할 코드
+                    console.error(error);
+                });
+            }
+ 
         </script>
         
 
